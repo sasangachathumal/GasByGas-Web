@@ -7,7 +7,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
-class request extends Model
+class requestModel extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,8 +17,8 @@ class request extends Model
      * @var string[]
      */
     protected $fillable = [
-        'date',
         'schedule_id',
+        'status',
         'gas_id',
         'type',
         'token',

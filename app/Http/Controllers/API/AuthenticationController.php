@@ -75,6 +75,11 @@ class AuthenticationController extends Controller
             : response()->json(['status' => false, 'message' => __($status)], 400);
     }
 
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
+
     public function logout()
     {
         Auth::logout();

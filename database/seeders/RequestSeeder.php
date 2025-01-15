@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\RequestStatusType;
 use App\RequestType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,6 +20,7 @@ class RequestSeeder extends Seeder
             'schedule_id' => 1,
             'gas_id' => 1,
             'type' => RequestType::Consumer->value,
+            'status' => RequestStatusType::Pending->value,
             'token' => 'GAS-00534',
             'quantity' => 1,
             'expired_at' => date('Y-m-d', strtotime(now().' + 14 days')),
@@ -30,6 +32,7 @@ class RequestSeeder extends Seeder
             'schedule_id' => 1,
             'gas_id' => 1,
             'type' => RequestType::Business->value,
+            'status' => RequestStatusType::Pending->value,
             'token' => 'GAS-00535',
             'quantity' => 25,
             'expired_at' => date('Y-m-d', strtotime(now().' + 14 days')),
@@ -41,6 +44,7 @@ class RequestSeeder extends Seeder
             'schedule_id' => 1,
             'gas_id' => 1,
             'type' => RequestType::Outlet->value,
+            'status' => RequestStatusType::Pending->value,
             'token' => 'GAS-00545',
             'quantity' => 20,
             'expired_at' => date('Y-m-d', strtotime(now().' + 14 days')),

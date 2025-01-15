@@ -14,7 +14,7 @@ class GasSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('gases')->insert([
+        DB::table('gas')->insert([
             'weight' => '12.5KG',
             'price' => '4500',
             'image' => './test.jpeg',
