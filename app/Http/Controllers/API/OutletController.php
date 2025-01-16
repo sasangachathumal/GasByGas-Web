@@ -1,9 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\outlet;
+use App\Models\User;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class OutletController extends Controller
 {
@@ -26,19 +34,46 @@ class OutletController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'name' => 'required',
-            'phone_no' => 'required',
-            'address' => 'required',
-            'status' => 'required',
-            'user_id' => 'required|exists:users,id'
+            'name' => 'required|string',
+            'phone_no' => 'required|string',
+            'address' => 'required|string',
+            'status' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'password' => 'required|min:8'
         ]);
 
-        $outlet = outlet::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Outlet created successfully',
-            'data' => $outlet
-        ], 201);
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => 'OUTLET'
+        ]);
+        if ($user) {
+            $outlet = outlet::create([
+                'user_id' => $user->id,
+                'email' => $request->email,
+                'name' => $request->name,
+                'phone_no' => $request->phone_no,
+                'address' => $request->address,
+                'status' => $request->status
+            ]);
+            if ($outlet) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Outlet created successfully',
+                    'data' => $outlet
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Outlet creation failed',
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User creation failed',
+            ], 400);
+        }
     }
 
     /**
@@ -47,11 +82,18 @@ class OutletController extends Controller
     public function show($id)
     {
         $outlet = outlet::findOrFail($id);
-        return response()->json([
-            'status' => true,
-            'message' => 'Outlet found successfully',
-            'data' => $outlet
-        ], 200);
+        if ($outlet) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Outlet found successfully',
+                'data' => $outlet
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => true,
+                'message' => 'Outlet not found'
+            ], 400);
+        }
     }
 
     /**
@@ -60,21 +102,38 @@ class OutletController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'email' => 'nullable|string|email',
             'name' => 'nullable|string',
             'phone_no' => 'nullable|string',
             'address' => 'nullable|string',
             'status' => 'nullable|string',
-            'user_id' => 'prohibited'
         ]);
 
         $outlet = outlet::findOrFail($id);
-        $outlet->update($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Outlet updated successfully',
-            'data' => $outlet
-        ], 201);
+        if ($outlet) {
+            $result = $outlet->update([
+                'name' => $request->name,
+                'phone_no' => $request->phone_no,
+                'address' => $request->address,
+                'status' => $request->status
+            ]);
+            if ($result > 0) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Outlet updated successfully',
+                    'data' => $outlet
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Outlet updated failed'
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Outlet not found'
+            ], 400);
+        }
     }
 
     /**
@@ -82,12 +141,18 @@ class OutletController extends Controller
      */
     public function destroy($id)
     {
-        $outlet = outlet::findOrFail($id);
-        $outlet->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Outlet deleted successfully'
-        ], 204);
+        $user = User::query()->where('id', '=', $id)->firstOrFail();
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Outlet user deleted successfully'
+            ], 204);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Outlet not found'
+            ], 400);
+        }
     }
 }

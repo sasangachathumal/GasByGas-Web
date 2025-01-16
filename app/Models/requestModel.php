@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class requestModel extends Model
 {
+    protected $table = 'requests';
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**

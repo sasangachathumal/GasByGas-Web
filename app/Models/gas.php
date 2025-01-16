@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class gas extends Model
 {
+    protected $table = 'gas';
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**

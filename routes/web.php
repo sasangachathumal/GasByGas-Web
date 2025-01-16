@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('dashboard');
 	})->name('dashboard');
 
+    Route::get('admin-dashboard', function () {return view('admin-dashboard');})->name('admin-dashboard');
+
 	Route::get('billing', function () {
 		return view('billing');
 	})->name('billing');
@@ -69,20 +71,14 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('sign-up');
 });
 
-
-
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/register', [RegisterController::class, 'create']);
-    Route::post('/register', [RegisterController::class, 'store']);
-    Route::get('/login', [SessionsController::class, 'create']);
-    Route::post('/session', [SessionsController::class, 'store']);
+    // Route::get('/register', [RegisterController::class, 'create']);
+    // Route::post('/register', [RegisterController::class, 'store']);
+    // Route::post('/session', [SessionsController::class, 'store']);
+    Route::get('/login', function () {return view('session/login-session');});
 	Route::get('/login/forgot-password', [ResetController::class, 'create']);
 	Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
 	Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
 	Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
 
 });
-
-Route::get('/login', function () {
-    return view('session/login-session');
-})->name('login');

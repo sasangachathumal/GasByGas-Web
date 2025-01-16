@@ -1,9 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\admin;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -26,17 +33,43 @@ class AdminController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'name' => 'required',
-            'phone_no' => 'required',
-            'user_id' => 'required|exists:users,id'
+            'name' => 'required|string',
+            'phone_no' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'password' => 'required|min:8'
         ]);
 
-        $admin = admin::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Admin created successfully',
-            'data' => $admin
-        ], 201);
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' => 'ADMIN'
+        ]);
+
+        if ($user) {
+            $admin = admin::create([
+                'user_id' => $user->id,
+                'email' => $request->email,
+                'name' => $request->name,
+                'phone_no' => $request->phone_no
+            ]);
+            if ($admin) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Admin created successfully',
+                    'data' => $admin
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Admin creation failed',
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User creation failed',
+            ], 400);
+        }
     }
 
     /**
@@ -45,11 +78,18 @@ class AdminController extends Controller
     public function show($id)
     {
         $admin = admin::findOrFail($id);
-        return response()->json([
-            'status' => true,
-            'message' => 'Admin found successfully',
-            'data' => $admin
-        ], 200);
+        if ($admin) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Admin found successfully',
+                'data' => $admin
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Admin not found'
+            ], 400);
+        }
     }
 
     /**
@@ -58,19 +98,34 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'email' => 'prohibited',
             'name' => 'nullable|string',
-            'phone_no' => 'nullable|string',
-            'user_id' => 'prohibited'
+            'phone_no' => 'nullable|string'
         ]);
 
         $admin = admin::findOrFail($id);
-        $admin->update($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Admin updated successfully',
-            'data' => $admin
-        ], 201);
+        if ($admin) {
+            $result = $admin->update([
+                'name' => $request->name,
+                'phone_no' => $request->phone_no
+            ]);
+            if ($result > 0) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Admin updated successfully',
+                    'data' => $admin
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Admin updated failed'
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Admin not found'
+            ], 400);
+        }
     }
 
     /**
@@ -78,12 +133,18 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $admin = admin::findOrFail($id);
-        $admin->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Admin deleted successfully'
-        ], 204);
+        $user = User::query()->where('id', '=', $id)->firstOrFail();
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Admin user deleted successfully'
+            ], 204);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Admin not found'
+            ], 400);
+        }
     }
 }

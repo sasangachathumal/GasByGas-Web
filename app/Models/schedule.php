@@ -19,7 +19,7 @@ class schedule extends Model
     protected $fillable = [
         'outlet_id',
         'status',
-        'approved_by',
-        'approved_date'
+        'schedule_date',
+        'max_quantity'
     ];
 }

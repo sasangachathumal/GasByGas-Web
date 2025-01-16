@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\schedule;
 use Illuminate\Http\Request;
@@ -27,8 +29,8 @@ class ScheduleController extends Controller
         $request->validate([
             'status' => 'required',
             'outlet_id' => 'required|exists:outlets,id',
-            'approved_by' => 'nullable',
-            'approved_date' => 'nullable'
+            'schedule_date' => 'required',
+            'max_quantity' => 'required'
         ]);
 
         $schedule = schedule::create($request->all());
@@ -60,8 +62,8 @@ class ScheduleController extends Controller
         $request->validate([
             'status' => 'nullable',
             'outlet_id' => 'prohibited',
-            'approved_by' => 'nullable',
-            'approved_date' => 'nullable'
+            'schedule_date' => 'nullable',
+            'max_quantity' => 'nullable'
         ]);
 
         $schedule = schedule::findOrFail($id);

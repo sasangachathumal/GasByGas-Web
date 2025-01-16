@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\requestModel;
 use App\Models\consumer;
+use App\Models\gas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,15 +17,33 @@ class RequestController extends Controller
      */
     public function index()
     {
-        $allRequest = DB::table('requests')
-        ->join('consumers' ,'requests.id', '=', 'consumers.id')
-        ->join('gas' ,'gas.id', '=', 'consumers.gas_id')
-        ->select('requests.*', 'gas.weight', 'gas.price', 'gas.image', 'consumer.nic', 'consumer.email', 'consumer.phone_no', 'consumer.type', 'consumer.business_no', 'consumer.status')
-        ->get();
+        $allRequests = requestModel::all();
+
+        $combinedResults = $allRequests->map(function ($request) {
+            // Get gas data for the current request
+            $gasData = gas::query()
+                ->where('id', $request->gas_id)
+                ->select('*')
+                ->first();
+
+            // Get consumer data for the current request
+            $consumerData = consumer::query()
+                ->where('request_id', $request->id)
+                ->select('*')
+                ->first();
+
+            // Return the combined data for the current request
+            return [
+                'request' => $request,
+                'gas' => $gasData,
+                'consumer' => $consumerData,
+            ];
+        });
+
         return response()->json([
             'status' => true,
             'message' => 'Requests retrieved successfully',
-            'data' => $allRequest
+            'data' => $combinedResults
         ], 200);
     }
 
@@ -51,7 +72,7 @@ class RequestController extends Controller
             'type' => $request->get('type'),
             'quantity' => $request->get('quantity'),
             'status' => $request->get('status'),
-            'expired_at' => date('Y-m-d', strtotime(now().' + 14 days')),
+            'expired_at' => date('Y-m-d', strtotime(now() . ' + 14 days')),
             'token' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 6)
         ]);
 
@@ -97,16 +118,32 @@ class RequestController extends Controller
      */
     public function show($id)
     {
-        $singleRequest = DB::table('requests')
-        ->join('consumers' ,'requests.id', '=', 'consumers.id')
-        ->join('gas' ,'gas.id', '=', 'consumers.gas_id')
-        ->select('requests.*', 'gas.weight', 'gas.price', 'gas.image', 'consumer.nic', 'consumer.email', 'consumer.phone_no', 'consumer.type', 'consumer.business_no', 'consumer.status')
-        ->where('request.id', '=', $id)
-        ->get();
+        $allRequests = requestModel::all()->where('id', '=', $id);
+
+        $combinedResults = $allRequests->map(function ($request) {
+            // Get gas data for the current request
+            $gasData = gas::query()
+                ->where('id', $request->gas_id)
+                ->select('*')
+                ->first();
+
+            // Get consumer data for the current request
+            $consumerData = consumer::query()
+                ->where('request_id', $request->id)
+                ->select('*')
+                ->first();
+
+            // Return the combined data for the current request
+            return [
+                'request' => $request,
+                'gas' => $gasData,
+                'consumer' => $consumerData,
+            ];
+        });
         return response()->json([
             'status' => true,
             'message' => 'Request found successfully',
-            'data' => $singleRequest
+            'data' => $combinedResults
         ], 200);
     }
 

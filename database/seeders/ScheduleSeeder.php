@@ -18,8 +18,8 @@ class ScheduleSeeder extends Seeder
         DB::table('schedules')->insert([
             'outlet_id' => 1,
             'status' => StatusType::Pending->value,
-            'approved_by' => null,
-            'approved_date' => null,
+            'schedule_date' => date('Y-m-d', strtotime(now().' + 14 days')),
+            'max_quantity' => 50,
             'created_at' => now(),
             'updated_at' => now()
         ]);
