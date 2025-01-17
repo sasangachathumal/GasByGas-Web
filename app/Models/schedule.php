@@ -20,6 +20,7 @@ class schedule extends Model
         'outlet_id',
         'status',
         'schedule_date',
-        'max_quantity'
+        'max_quantity',
+        'available_quantity'
     ];
 }

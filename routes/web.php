@@ -29,7 +29,17 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('dashboard');
 	})->name('dashboard');
 
-    Route::get('admin-dashboard', function () {return view('admin-dashboard');})->name('admin-dashboard');
+    Route::get('admin-dashboard', function () {return view('dashboard');})->name('dashboard');
+
+    Route::get('admin-management', function () {return view('admin-management');})->name('admin-management');
+
+    Route::get('outlet-management', function () {return view('outlet-management');})->name('outlet-management');
+
+    Route::get('schedule-management', function () {return view('schedule-management');})->name('schedule-management');
+
+    Route::get('gas-management', function () {return view('gas-management');})->name('gas-management');
+
+    Route::get('gas-request-management', function () {return view('gas-request-management');})->name('gas-request-management');
 
 	Route::get('billing', function () {
 		return view('billing');
@@ -44,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('rtl');
 
 	Route::get('user-management', function () {
-		return view('laravel-examples/user-management');
+		return view('user-management');
 	})->name('user-management');
 
 	Route::get('tables', function () {
@@ -75,6 +85,7 @@ Route::group(['middleware' => 'guest'], function () {
     // Route::get('/register', [RegisterController::class, 'create']);
     // Route::post('/register', [RegisterController::class, 'store']);
     // Route::post('/session', [SessionsController::class, 'store']);
+    Route::get('/login', [SessionsController::class, 'create']);
     Route::get('/login', function () {return view('session/login-session');});
 	Route::get('/login/forgot-password', [ResetController::class, 'create']);
 	Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
@@ -82,3 +93,5 @@ Route::group(['middleware' => 'guest'], function () {
 	Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
 
 });
+
+Route::get('/login', function () {return view('session/login-session');})->name('login');

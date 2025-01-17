@@ -16,8 +16,9 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->foreignId('outlet_id')->constrained('outlets')->cascadeOnDelete()->cascadeOnUpdate();
             $table->enum('status', array_column(StatusType::cases(), 'value'))->default(StatusType::Pending->value);
-            $table->date('schedule_date')->nullable();
-            $table->integer('max_quantity')-> nullable();
+            $table->date('schedule_date');
+            $table->integer('max_quantity');
+            $table->integer('available_quantity')->nullable();
             $table->timestamps();
         });
     }

@@ -20,6 +20,7 @@ class ScheduleSeeder extends Seeder
             'status' => StatusType::Pending->value,
             'schedule_date' => date('Y-m-d', strtotime(now().' + 14 days')),
             'max_quantity' => 50,
+            'available_quantity' => 4,
             'created_at' => now(),
             'updated_at' => now()
         ]);

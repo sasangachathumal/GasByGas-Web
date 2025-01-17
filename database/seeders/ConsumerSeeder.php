@@ -19,7 +19,7 @@ class ConsumerSeeder extends Seeder
         DB::table('consumers')->insert([
             'request_id' => 1,
             'nic' => '928374591V',
-            'email' => 'consumer1@gmail.com',
+            'email' => 'consumer@gmail.com',
             'phone_no' => '+094710453447',
             'type' => ConsumerType::Customer->value,
             'business_no' => null,
@@ -31,10 +31,22 @@ class ConsumerSeeder extends Seeder
         DB::table('consumers')->insert([
             'request_id' => 2,
             'nic' => null,
-            'email' => 'consumer1@gmail.com',
+            'email' => 'cbusiness@gmail.com',
             'phone_no' => '+094710453447',
             'type' => ConsumerType::Customer->value,
             'business_no' => 'RTS-44552299C',
+            'status' => StatusType::Approved->value,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('consumers')->insert([
+            'request_id' => 3,
+            'nic' => null,
+            'email' => 'outlet@softui.com',
+            'phone_no' => '+094710453447',
+            'type' => ConsumerType::Outlet->value,
+            'business_no' => '',
             'status' => StatusType::Approved->value,
             'created_at' => now(),
             'updated_at' => now()

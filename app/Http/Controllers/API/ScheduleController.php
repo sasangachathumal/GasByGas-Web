@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use App\Models\schedule;
+use App\Models\outlet;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -14,10 +15,13 @@ class ScheduleController extends Controller
      */
     public function index()
     {
+        $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
+            ->select('schedules.id', 'outlets.id', 'outlets.name', 'outlets.email', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->get();
         return response()->json([
             'status' => true,
             'message' => 'Schedules retrieved successfully',
-            'data' => schedule::all()
+            'data' => $scheduleData
         ], 200);
     }
 
