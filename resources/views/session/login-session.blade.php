@@ -94,7 +94,10 @@
                 success: function(response) {
                     console.log(response);
                     if (response.user.type === "ADMIN") {
-                        window.location.href = "/admin-dashboard";
+                        window.location.href = "/admin/dashboard";
+                    }
+                    if (response.user.type === "OUTLET") {
+                        window.location.href = "/outlet/dashboard";
                     }
                 },
                 error: function(xhr) {

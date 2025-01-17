@@ -25,21 +25,28 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [HomeController::class, 'home']);
-	Route::get('dashboard', function () {
-		return view('dashboard');
-	})->name('dashboard');
 
-    Route::get('admin-dashboard', function () {return view('dashboard');})->name('dashboard');
+    Route::prefix('admin')->group(function () {
+        Route::get('dashboard', function () {return view('admin/admin-dashboard');})->name('dashboard');
 
-    Route::get('admin-management', function () {return view('admin-management');})->name('admin-management');
+        Route::get('admin-management', function () {return view('admin/admin-management');})->name('admin-management');
 
-    Route::get('outlet-management', function () {return view('outlet-management');})->name('outlet-management');
+        Route::get('outlet-management', function () {return view('admin/outlet-management');})->name('outlet-management');
 
-    Route::get('schedule-management', function () {return view('schedule-management');})->name('schedule-management');
+        Route::get('schedule-management', function () {return view('admin/schedule-management');})->name('schedule-management');
 
-    Route::get('gas-management', function () {return view('gas-management');})->name('gas-management');
+        Route::get('gas-management', function () {return view('admin/gas-management');})->name('gas-management');
 
-    Route::get('gas-request-management', function () {return view('gas-request-management');})->name('gas-request-management');
+        Route::get('gas-request-management', function () {return view('admin/gas-request-management');})->name('gas-request-management');
+    });
+
+    Route::prefix('outlet')->group(function () {
+        Route::get('dashboard', function () {return view('outlet/outlet-dashboard');})->name('dashboard');
+
+        Route::get('schedule-management', function () {return view('outlet/schedule-management');})->name('schedule-management');
+
+        Route::get('gas-request-management', function () {return view('outlet/gas-request-management');})->name('gas-request-management');
+    });
 
 	Route::get('billing', function () {
 		return view('billing');
