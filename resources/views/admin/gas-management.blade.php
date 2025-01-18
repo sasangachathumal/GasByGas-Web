@@ -163,7 +163,7 @@
                             <td class='align-middle text-center'>${gas.price ? gas.price : '~none~'}</td>
                             <td class='align-middle text-center'>
                                 <span>
-                                    <i class="cursor-pointer fas fa-pancil-alt text-secondary mx-3" onclick="viewSelectedGas(${gas.id})"></i>
+                                    <i class="cursor-pointer fas fa-pencil-alt text-secondary mx-3" onclick="viewSelectedGas(${gas.id})"></i>
                                 </span>
                                 <span>
                                     <i class="cursor-pointer fas fa-trash text-danger mx-3" onclick="deleteSelectedGas(${gas.id})"></i>
