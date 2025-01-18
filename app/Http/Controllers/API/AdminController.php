@@ -35,13 +35,11 @@ class AdminController extends Controller
             'email' => 'required|email',
             'name' => 'required|string',
             'phone_no' => 'required|string',
-            'user_id' => 'required|exists:users,id',
-            'password' => 'required|min:8'
         ]);
 
         $user = User::create([
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make('secret'),
             'type' => 'ADMIN'
         ]);
 
@@ -139,7 +137,7 @@ class AdminController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Admin user deleted successfully'
-            ], 204);
+            ], 200);
         } else {
             return response()->json([
                 'status' => false,

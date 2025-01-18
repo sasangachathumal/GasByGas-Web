@@ -27,6 +27,18 @@ class OutletController extends Controller
         ], 200);
     }
 
+    public function count()
+    {
+        $outletDataCount = outlet::query()
+            ->get()
+            ->count();
+        return response()->json([
+            'status' => true,
+            'message' => 'Outlet count retrieved successfully',
+            'data' => $outletDataCount
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
