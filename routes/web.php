@@ -25,9 +25,28 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [HomeController::class, 'home']);
-	Route::get('dashboard', function () {
-		return view('dashboard');
-	})->name('dashboard');
+
+    Route::prefix('admin')->group(function () {
+        Route::get('dashboard', function () {return view('admin/admin-dashboard');})->name('dashboard');
+
+        Route::get('admin-management', function () {return view('admin/admin-management');})->name('admin-management');
+
+        Route::get('outlet-management', function () {return view('admin/outlet-management');})->name('outlet-management');
+
+        Route::get('schedule-management', function () {return view('admin/schedule-management');})->name('schedule-management');
+
+        Route::get('gas-management', function () {return view('admin/gas-management');})->name('gas-management');
+
+        Route::get('gas-request-management', function () {return view('admin/gas-request-management');})->name('gas-request-management');
+    });
+
+    Route::prefix('outlet')->group(function () {
+        Route::get('dashboard', function () {return view('outlet/outlet-dashboard');})->name('dashboard');
+
+        Route::get('schedule-management', function () {return view('outlet/schedule-management');})->name('schedule-management');
+
+        Route::get('gas-request-management', function () {return view('outlet/gas-request-management');})->name('gas-request-management');
+    });
 
 	Route::get('billing', function () {
 		return view('billing');
@@ -42,7 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('rtl');
 
 	Route::get('user-management', function () {
-		return view('laravel-examples/user-management');
+		return view('user-management');
 	})->name('user-management');
 
 	Route::get('tables', function () {
@@ -69,13 +88,12 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('sign-up');
 });
 
-
-
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/register', [RegisterController::class, 'create']);
-    Route::post('/register', [RegisterController::class, 'store']);
+    // Route::get('/register', [RegisterController::class, 'create']);
+    // Route::post('/register', [RegisterController::class, 'store']);
+    // Route::post('/session', [SessionsController::class, 'store']);
     Route::get('/login', [SessionsController::class, 'create']);
-    Route::post('/session', [SessionsController::class, 'store']);
+    Route::get('/login', function () {return view('session/login-session');});
 	Route::get('/login/forgot-password', [ResetController::class, 'create']);
 	Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
 	Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
@@ -83,6 +101,4 @@ Route::group(['middleware' => 'guest'], function () {
 
 });
 
-Route::get('/login', function () {
-    return view('session/login-session');
-})->name('login');
+Route::get('/login', function () {return view('session/login-session');})->name('login');
