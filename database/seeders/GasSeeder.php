@@ -17,21 +17,18 @@ class GasSeeder extends Seeder
         DB::table('gas')->insert([
             'weight' => '2.3KG',
             'price' => '2000',
-            'image' => './test.jpeg',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('gas')->insert([
             'weight' => '5KG',
             'price' => '3600',
-            'image' => './test.jpeg',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('gas')->insert([
             'weight' => '12.5KG',
             'price' => '4500',
-            'image' => './test.jpeg',
             'created_at' => now(),
             'updated_at' => now()
         ]);

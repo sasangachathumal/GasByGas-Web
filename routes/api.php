@@ -44,6 +44,7 @@ Route::middleware('web')->group(function () {
         Route::delete('/admin/{id}', [AdminController::class, 'destroy']);
 
         Route::get('/schedule', [ScheduleController::class, 'index']);
+        Route::get('/schedule/count', [ScheduleController::class, 'count']);
         Route::post('/schedule', [ScheduleController::class, 'store']);
         Route::get('/schedule/{id}', [ScheduleController::class, 'show']);
         Route::put('/schedule/{id}', [ScheduleController::class, 'update']);
@@ -56,6 +57,7 @@ Route::middleware('web')->group(function () {
         Route::delete('/consumer/{id}', [ConsumerController::class, 'destroy']);
 
         Route::get('/request', [RequestController::class, 'index']);
+        Route::get('/request/count', [RequestController::class, 'count']);
         Route::post('/request', [RequestController::class, 'store']);
         Route::get('/request/{id}', [RequestController::class, 'show']);
         Route::put('/request/status/{id}', [RequestController::class, 'updateRequestStatus']);
@@ -70,9 +72,11 @@ Route::middleware('web')->group(function () {
         Route::delete('/gas/{id}', [GasController::class, 'destroy']);
 
         Route::get('/outlet', [OutletController::class, 'index']);
+        Route::get('/outlet/count', [OutletController::class, 'count']);
         Route::post('/outlet', [OutletController::class, 'store']);
         Route::get('/outlet/{id}', [OutletController::class, 'show']);
         Route::put('/outlet/{id}', [OutletController::class, 'update']);
+        Route::put('/outlet/status/{id}', [OutletController::class, 'updateStatus']);
         Route::delete('/outlet/{id}', [OutletController::class, 'destroy']);
     });
 });

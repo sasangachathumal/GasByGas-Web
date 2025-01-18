@@ -28,8 +28,7 @@ class GasController extends Controller
     {
         $request->validate([
             'weight' => 'required',
-            'price' => 'required',
-            'image' => 'string'
+            'price' => 'required'
         ]);
 
         $gas = gas::create($request->all());
@@ -59,9 +58,8 @@ class GasController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'weight' => 'nullable|sting',
-            'price' => 'nullable|string',
-            'image' => 'nullable|string'
+            'weight' => 'nullable',
+            'price' => 'nullable'
         ]);
 
         $gas = gas::findOrFail($id);

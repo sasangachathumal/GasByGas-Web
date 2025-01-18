@@ -21,6 +21,5 @@ class gas extends Model
     protected $fillable = [
         'weight',
         'price',
-        'image'
     ];
 }

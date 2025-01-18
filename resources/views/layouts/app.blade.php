@@ -48,10 +48,12 @@
     <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+    <link href="../assets/css/jquery-confirm.min.css" rel="stylesheet" />
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/jquery-confirm.min.js"></script>
 
 </head>
 

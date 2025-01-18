@@ -25,6 +25,18 @@ class ScheduleController extends Controller
         ], 200);
     }
 
+    public function count()
+    {
+        $scheduleDataCount = schedule::query()
+            ->get()
+            ->count();
+        return response()->json([
+            'status' => true,
+            'message' => 'Schedules count retrieved successfully',
+            'data' => $scheduleDataCount
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

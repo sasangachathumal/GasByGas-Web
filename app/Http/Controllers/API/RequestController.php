@@ -47,6 +47,18 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function count()
+    {
+        $requestDataCount = requestModel::query()
+            ->get()
+            ->count();
+        return response()->json([
+            'status' => true,
+            'message' => 'Request count retrieved successfully',
+            'data' => $requestDataCount
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
