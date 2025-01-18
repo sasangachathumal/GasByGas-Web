@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->string('weight');
             $table->decimal('price');
-            $table->string('image');
             $table->timestamps();
         });
     }

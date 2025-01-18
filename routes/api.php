@@ -76,6 +76,7 @@ Route::middleware('web')->group(function () {
         Route::post('/outlet', [OutletController::class, 'store']);
         Route::get('/outlet/{id}', [OutletController::class, 'show']);
         Route::put('/outlet/{id}', [OutletController::class, 'update']);
+        Route::put('/outlet/status/{id}', [OutletController::class, 'updateStatus']);
         Route::delete('/outlet/{id}', [OutletController::class, 'destroy']);
     });
 });

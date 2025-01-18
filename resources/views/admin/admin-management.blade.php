@@ -14,7 +14,6 @@
                         <button type="button" class="btn bg-gradient-primary  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newAdmin">
                             +&nbsp; New Admin
                         </button>
-                        <!-- <a href="#" class="btn bg-gradient-primary btn-sm mb-0" type="button">+&nbsp; New Admin</a> -->
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -172,10 +171,10 @@
                             <td class='align-middle text-center'>${admin.phone_no ? admin.phone_no : '~none~'}</td>
                             <td class='align-middle text-center'>
                                 <span>
-                                    <i class="cursor-pointer fas fa-user-edit text-secondary mx-3" onclick="viewSelectedAdmin(${admin.id})"></i>
+                                    <i class="cursor-pointer fas fa-pencil-alt text-secondary mx-3" onclick="viewSelectedAdmin(${admin.id})"></i>
                                 </span>
                                 <span>
-                                    <i class="cursor-pointer fas fa-trash text-secondary mx-3" onclick="deleteSelectedAdmin(${admin.user_id})"></i>
+                                    <i class="cursor-pointer fas fa-trash text-danger mx-3" onclick="deleteSelectedAdmin(${admin.user_id})"></i>
                                 </span>
                             </td>
                         </tr>
