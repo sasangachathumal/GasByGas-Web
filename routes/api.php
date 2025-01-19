@@ -73,6 +73,7 @@ Route::middleware('web')->group(function () {
 
         Route::get('/outlet', [OutletController::class, 'index']);
         Route::get('/outlet/count', [OutletController::class, 'count']);
+        Route::get('/outlet/search', [OutletController::class, 'searchByName']);
         Route::post('/outlet', [OutletController::class, 'store']);
         Route::get('/outlet/{id}', [OutletController::class, 'show']);
         Route::put('/outlet/{id}', [OutletController::class, 'update']);

@@ -192,6 +192,7 @@
         $("#message-toast").toast();
         $("#editOutlet").modal();
         loadData();
+        clearInputs();
     });
 
     function loadData() {
@@ -304,6 +305,7 @@
                                     $('#message-toast').addClass("bg-success");
                                     $('#message-toast-body').html("Success!   Outlet Delete successfull");
                                     loadData();
+                                    clearInputs();
                                 })
                                 .fail(function() {
                                     $('#message-toast').toast('show');
@@ -404,6 +406,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!   New Outlet Successfully Created!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#newOutletErrorMessages').show();
@@ -447,6 +450,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Outlet Update Successfull!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#editOutletErrorMessages').show();
@@ -486,6 +490,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Outlet Update Successfull!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#editOutletStatusErrorMessages').show();
@@ -493,6 +498,18 @@
             },
         });
     });
+
+    function clearInputs() {
+        $('#new-outlet-name-input').val(null);
+        $('#new-outlet-email-input').val(null);
+        $('#new-outlet-phoneNo-input').val(null);
+        $('#new-outlet-address-input').val(null);
+        $('#edit-outlet-name-input').val(null);
+        $('#edit-outlet-phoneNo-input').val(null);
+        $('#edit-outlet-address-input').val(null);
+        $('#edit-outlet-id-input').val(null);
+        $('#status-outlet-status-input').val(null);
+    }
 </script>
 
 @endsection

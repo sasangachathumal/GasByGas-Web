@@ -126,6 +126,7 @@
         $("#message-toast").toast();
         $("#edit-gas-modal").modal();
         loadData();
+        clearInputs();
     });
 
     function loadData() {
@@ -222,6 +223,7 @@
                                     $('#message-toast').addClass("bg-success");
                                     $('#message-toast-body').html("Success!   Gas Delete successfull");
                                     loadData();
+                                    clearInputs();
                                 })
                                 .fail(function() {
                                     $('#message-toast').toast('show');
@@ -318,6 +320,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!   New Gas Successfully Created!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#newGasErrorMessages').show();
@@ -359,6 +362,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Gas Update Successfull!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#editGasErrorMessages').show();
@@ -366,6 +370,14 @@
             },
         });
     });
+
+    function clearInputs() {
+        $('#new-gas-weight-input').val(null);
+        $('#new-gas-price-input').val(null);
+        $('#edit-gas-weight-input').val(null);
+        $('#edit-gas-price-input').val(null);
+        $('#edit-gas-id-input').val(null);
+    }
 </script>
 
 @endsection

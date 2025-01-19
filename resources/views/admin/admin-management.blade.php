@@ -133,6 +133,8 @@
         $("#message-toast").toast();
         $("#editAdmin").modal();
         loadData();
+        clearInputs(true);
+        clearInputs(false);
     });
 
     function loadData() {
@@ -230,6 +232,7 @@
                                     $('#message-toast').addClass("bg-success");
                                     $('#message-toast-body').html("Success!   Admin Delete successfull");
                                     loadData();
+                                    clearInputs(false);
                                 })
                                 .fail(function() {
                                     $('#message-toast').toast('show');
@@ -328,6 +331,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!   New Admin Successfully Created!");
                 loadData();
+                clearInputs(true);
             },
             error: function(xhr) {
                 $('#newAdminErrorMessages').show();
@@ -369,6 +373,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Admin Update Successfull!");
                 loadData();
+                clearInputs(false);
             },
             error: function(xhr) {
                 $('#editAdminErrorMessages').show();
@@ -376,6 +381,17 @@
             },
         });
     });
+    function clearInputs(isNew = true) {
+        if (isNew) {
+            $('#new-admin-name-input').val(null);
+            $('#new-admin-email-input').val(null);
+            $('#new-admin-phoneNo-input').val(null);
+        } else {
+            $('#edit-admin-name-input').val(null);
+            $('#edit-admin-phoneNo-input').val(null);
+            $('#edit-admin-id-input').val(null);
+        }
+    }
 </script>
 
 @endsection

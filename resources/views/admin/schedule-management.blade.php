@@ -72,48 +72,49 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6 ms-auto">
-                            <h4>Outlet Details</h4>
-                            <label for="outlet-search-input" class="form-control-label">Search by outlet name</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="outlet-search-input" placeholder="Outlet Name" aria-label="Example text with two button addons" aria-describedby="button-addon3">
-                                <button class="btn btn-outline-primary mb-0 btn-icon btn-2" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                    <form id="new-schedule-form" role="form" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 ms-auto">
+                                <h4>Outlet Details</h4>
+                                <label for="outlet-search-input" class="form-control-label">Search by outlet name</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="typeahead form-control" id="outlet-search-input" placeholder="Outlet Name" aria-label="Example text with two button addons" aria-describedby="button-addon3" required>
+                                    <button class="btn btn-outline-primary mb-0 btn-icon btn-2" type="button" onclick="searchOutlet(true)">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-schedule-outlet-email" class="form-control-label">Outlet Email</label>
+                                    <input class="form-control" type="text" readonly id="new-schedule-outlet-email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-schedule-outlet-phoneNo" class="form-control-label">Outlet Phone No</label>
+                                    <input class="form-control" type="text" readonly id="new-schedule-outlet-phoneNo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-schedule-outlet-status" class="form-control-label">Outlet Status</label>
+                                    <input class="form-control" type="text" readonly id="new-schedule-outlet-status">
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-schedule-outlet-address" class="form-control-label">Outlet Address</label>
+                                    <input class="form-control" type="text" readonly id="new-schedule-outlet-address">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="new-schedule-outlet-email" class="form-control-label">Outlet Email</label>
-                                <input class="form-control" type="text" readonly id="new-schedule-outlet-email">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-schedule-outlet-phoneNo" class="form-control-label">Outlet Phone No</label>
-                                <input class="form-control" type="text" readonly id="new-schedule-outlet-phoneNo">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-schedule-outlet-status" class="form-control-label">Outlet Status</label>
-                                <input class="form-control" type="text" readonly id="new-schedule-outlet-status">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-schedule-outlet-address" class="form-control-label">Outlet Address</label>
-                                <input class="form-control" type="text" readonly id="new-schedule-outlet-address">
-                            </div>
-                        </div>
-                        <div class="col-md-6 ms-auto">
-                            <h4>Schedule Details</h4>
-                            <form id="new-schedule-form" role="form" method="POST">
+                            <div class="col-md-6 ms-auto">
+                                <h4>Schedule Details</h4>
                                 <div class="form-group">
                                     <label for="new-schedule-date" class="form-control-label">Schedule Date</label>
-                                    <input class="form-control" type="date" id="new-schedule-date">
+                                    <input class="form-control" required type="date" id="new-schedule-date">
                                 </div>
                                 <div class="form-group">
                                     <label for="new-schedule-quentity" class="form-control-label">Schedule Quentity</label>
-                                    <input class="form-control" type="text" placeholder="200" id="new-schedule-quentity">
+                                    <input class="form-control" required type="text" placeholder="200" id="new-schedule-quentity">
                                 </div>
+                                <input type="hidden" id="new-schedule-outlet-id">
                                 <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
@@ -135,47 +136,40 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6 ms-auto">
-                            <h4>Outlet Details</h4>
-                            <label id="outlet-edit-search-input-label" style="display: none;" class="form-control-label">Search by outlet name</label>
-                            <div class="input-group mb-3" style="display: none;" id="outlet-search-input-container">
-                                <input type="text" class="form-control" id="outlet-edit-search-input" placeholder="Outlet Name" aria-label="Example text with two button addons" aria-describedby="button-addon3">
-                                <button class="btn btn-outline-primary mb-0 btn-icon btn-2" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                    <form id="edit-schedule-form" role="form" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 ms-auto">
+                                <h4>Outlet Details</h4>
+                                <div class="form-group" id="view-schedule-outlet-name-container">
+                                    <label for="view-schedule-outlet-name" class="form-control-label">Outlet Name</label>
+                                    <input class="form-control" type="text" readonly id="view-schedule-outlet-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="view-schedule-outlet-email" class="form-control-label">Outlet Email</label>
+                                    <input class="form-control" type="text" readonly id="view-schedule-outlet-email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="view-schedule-outlet-phoneNo" class="form-control-label">Outlet Phone No</label>
+                                    <input class="form-control" type="text" readonly id="view-schedule-outlet-phoneNo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="view-schedule-outlet-status" class="form-control-label">Outlet Status</label>
+                                    <input class="form-control" type="text" readonly id="view-schedule-outlet-status">
+                                </div>
+                                <div class="form-group">
+                                    <label for="view-schedule-outlet-address" class="form-control-label">Outlet Address</label>
+                                    <input class="form-control" type="text" readonly id="view-schedule-outlet-address">
+                                </div>
                             </div>
-                            <div class="form-group" id="view-schedule-outlet-name-container">
-                                <label for="view-schedule-outlet-name" class="form-control-label">Outlet Name</label>
-                                <input class="form-control" type="text" readonly id="view-schedule-outlet-name">
-                            </div>
-                            <div class="form-group">
-                                <label for="view-schedule-outlet-email" class="form-control-label">Outlet Email</label>
-                                <input class="form-control" type="text" readonly id="view-schedule-outlet-email">
-                            </div>
-                            <div class="form-group">
-                                <label for="view-schedule-outlet-phoneNo" class="form-control-label">Outlet Phone No</label>
-                                <input class="form-control" type="text" readonly id="view-schedule-outlet-phoneNo">
-                            </div>
-                            <div class="form-group">
-                                <label for="view-schedule-outlet-status" class="form-control-label">Outlet Status</label>
-                                <input class="form-control" type="text" readonly id="view-schedule-outlet-status">
-                            </div>
-                            <div class="form-group">
-                                <label for="view-schedule-outlet-address" class="form-control-label">Outlet Address</label>
-                                <input class="form-control" type="text" readonly id="view-schedule-outlet-address">
-                            </div>
-                        </div>
-                        <div class="col-md-6 ms-auto">
-                            <h4>Schedule Details</h4>
-                            <form id="edit-schedule-form" role="form" method="POST">
+                            <div class="col-md-6 ms-auto">
+                                <h4>Schedule Details</h4>
                                 <div class="form-group">
                                     <label for="edit-schedule-date" class="form-control-label">Schedule Date</label>
-                                    <input class="form-control" type="date" readonly required id="edit-schedule-date">
+                                    <input class="form-control" type="date" readonly id="edit-schedule-date">
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-schedule-max-quentity" class="form-control-label">Schedule Quentity</label>
-                                    <input class="form-control" type="text" readonly required id="edit-schedule-max-quentity">
+                                    <input class="form-control" type="text" readonly id="edit-schedule-max-quentity">
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-available-quentity" class="form-control-label">Available Quentity</label>
@@ -187,13 +181,13 @@
                                 </div>
                                 <div class="form-group" style="display: none;" id="edit-schedule-status-container">
                                     <label for="outlet-phoneNo-input" class="form-control-label">Schedule Status</label>
-                                    <select class="form-control" required id="edit-schedule-status">
+                                    <select class="form-control" id="edit-schedule-status">
                                         <option value="PENDING">Pending</option>
                                         <option value="APPROVED">Approved</option>
                                         <option value="REJECTED">Rejected</option>
                                     </select>
                                 </div>
-                                <input type="hidden" id="edit-schedule-outlet-id">
+                                <input type="hidden" id="edit-schedule-id">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <button type="button" id="edit-option-view-btn" onclick="viewEditPotions(true)" class="btn bg-gradient-primary w-100 mt-4 mb-0">
@@ -214,9 +208,9 @@
                                         <button type="button" onclick="viewEditPotions(false)" class="btn bg-gradient-secondary w-100 mt-4 mb-0">Cancel</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
@@ -239,6 +233,8 @@
         $("#message-toast").toast();
         $("#viewEditSchedule").modal();
         loadData();
+        clearInputs(true);
+        clearInputs(false);
     });
 
     function viewEditPotions(option) {
@@ -248,9 +244,6 @@
             $('#outlet-delete-btn').hide();
             $('#edit-schedule-quentity').attr("readonly", false);
             $('#edit-schedule-date').attr("readonly", false);
-            $('#view-schedule-outlet-name-container').hide();
-            $('#outlet-search-input-container').show();
-            $('#outlet-edit-search-input-label').show();
             $('#viewEditScheduleModalLabel').html('Edit Schedule');
             $('#view-schedule-status-container').hide();
             $('#edit-schedule-status-container').show();
@@ -261,9 +254,6 @@
             $('#outlet-delete-btn').show();
             $('#edit-schedule-quentity').attr("readonly", true);
             $('#edit-schedule-date').attr("readonly", true);
-            $('#view-schedule-outlet-name-container').show();
-            $('#outlet-search-input-container').hide();
-            $('#outlet-edit-search-input-label').hide();
             $('#viewEditScheduleModalLabel').html('View Schedule');
             $('#view-schedule-status-container').show();
             $('#edit-schedule-status-container').hide();
@@ -326,7 +316,8 @@
             getSingleSchedule(scheduleID)
                 .done(function(result) {
                     if (result.data && result.data.id) {
-                        $('#edit-schedule-outlet-id').val(result.data.outlet_id);
+                        $('#edit-schedule-id').val(result.data.id);
+
                         $('#view-schedule-outlet-name').val(result.data.out_name);
                         $('#outlet-edit-search-input').val(result.data.out_name);
                         $('#view-schedule-outlet-email').val(result.data.out_email);
@@ -382,7 +373,7 @@
     }
 
     function deleteSelectedSchedule() {
-        const scheduleID = $('#edit-schedule-outlet-id').val();
+        const scheduleID = $('#edit-schedule-id').val();
         if (scheduleID) {
             $.confirm({
                 title: 'Delete Record?',
@@ -396,12 +387,15 @@
                         action: function() {
                             deleteSingleSchedule(scheduleID)
                                 .done(function(result) {
+                                    $("#viewEditSchedule").modal('toggle');
                                     $('#message-toast').toast('show');
                                     $('#message-toast').addClass("bg-success");
                                     $('#message-toast-body').html("Success!   ScheduleID Delete successfull");
+                                    clearInputs(false);
                                     loadData();
                                 })
                                 .fail(function() {
+                                    $("#viewEditSchedule").modal('toggle');
                                     $('#message-toast').toast('show');
                                     $('#message-toast').addClass("bg-danger");
                                     $('#message-toast-body').html("Error!   Please try again");
@@ -442,47 +436,18 @@
         });
     }
 
-    function viewSelectedOutlet(outletID, action = null) {
-        if (outletID) {
-            getSingleOutlet(outletID)
-                .done(function(result) {
-                    if (result.data && result.data.id) {
-                        if (action === "status") {
-                            $('#status-outlet-id-input').val(result.data.id);
-                            $('#status-outlet-name-input').val(result.data.name);
-                            $('#status-outlet-phoneNo-input').val(result.data.phone_no);
-                            $('#status-outlet-address-input').val(result.data.address);
-                            $('#status-outlet-status-input').val(result.data.status);
-                            $("#editOutletStatus").modal('toggle');
-                        } else {
-                            $('#edit-outlet-id-input').val(result.data.id);
-                            $('#edit-outlet-name-input').val(result.data.name);
-                            $('#edit-outlet-phoneNo-input').val(result.data.phone_no);
-                            $('#edit-outlet-address-input').val(result.data.address);
-                            $("#editOutlet").modal('toggle');
-                        }
-                    } else {
-                        $('#message-toast').toast('show');
-                        $('#message-toast').addClass("bg-danger");
-                        $('#message-toast-body').html("Error!   Please try again");
-                    }
-                })
-                .fail(function() {
-                    $('#message-toast').toast('show');
-                    $('#message-toast').addClass("bg-danger");
-                    $('#message-toast-body').html("Error!   Please try again");
-                });
+    function searchOutlet(isNew = true) {
+        let name = null;
+        if (isNew) {
+            $('#newScheduleErrorMessages').hide();
+            name = $('#outlet-search-input').val();
         } else {
-            $('#message-toast').toast('show');
-            $('#message-toast').addClass("bg-danger");
-            $('#message-toast-body').html("Error!   Please try again");
+            $('#viewEditScheduleErrorMessages').hide();
+            name = $('#outlet-edit-search-input').val();
         }
-    }
-
-    function getSingleOutlet(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         return $.ajax({
-            url: '/api/v1/outlet/' + id,
+            url: '/api/v1/outlet/search?search=' + name,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -493,12 +458,150 @@
                 withCredentials: true,
             },
             success: function(response) {
-                return response;
+                if (response.data && response.data.length > 0) {
+                    if (isNew) {
+                        $('#new-schedule-outlet-id').val(response.data[0].id);
+                        $('#new-schedule-outlet-email').val(response.data[0].email);
+                        $('#new-schedule-outlet-phoneNo').val(response.data[0].phone_no);
+                        $('#new-schedule-outlet-status').val(response.data[0].status);
+                        $('#new-schedule-outlet-address').val(response.data[0].address);
+                    }
+                } else {
+                    if (isNew) {
+                        $('#newScheduleErrorMessages').show();
+                        $('#newScheduleErrorMessages').html("Error!   Outlet Not Found!");
+                    }
+                }
             },
             error: function(xhr) {
-                return xhr;
+                if (isNew) {
+                    $('#newScheduleErrorMessages').show();
+                    $('#newScheduleErrorMessages').html("Error!   Please Try Again!");
+                }
             },
         });
+    }
+
+    $('#new-schedule-form').on('submit', function(e) {
+        e.preventDefault();
+
+        // Get CSRF token from meta tag
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        // Collect form data
+        const date = $('#new-schedule-date').val();
+        const quentity = $('#new-schedule-quentity').val();
+        const id = $('#new-schedule-outlet-id').val();
+
+        // Make an AJAX POST request
+        $.ajax({
+            url: '/api/v1/schedule',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                schedule_date: date,
+                max_quantity: quentity,
+                outlet_id: id
+            }),
+            xhrFields: {
+                withCredentials: true,
+            },
+            success: function(response) {
+                $('#newSchedule').modal('toggle');
+                $('#message-toast').toast('show');
+                $('#message-toast').addClass("bg-success");
+                $('#message-toast-body').html("Success!   New Schedule Successfully Updated!");
+                loadData();
+                clearInputs(true);
+            },
+            error: function(xhr) {
+                $('#newScheduleErrorMessages').show();
+                if (xhr.errors) {
+                    $('#newScheduleErrorMessages').html("Error!   Please fill all the required fields!");
+                } else {
+                    $('#newScheduleErrorMessages').html("Error!   New Schedule Update Failed!");
+                }
+            },
+        });
+    });
+
+    $('#edit-schedule-form').on('submit', function(e) {
+        e.preventDefault();
+
+        // Get CSRF token from meta tag
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        // Collect form data
+        const date = $('#edit-schedule-date').val();
+        const quentity = $('#edit-schedule-max-quentity').val();
+        const status = $('#edit-schedule-status').val();
+        const id = $('#edit-schedule-id').val();
+
+        // Make an AJAX POST request
+        $.ajax({
+            url: '/api/v1/schedule/'+id,
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                schedule_date: date,
+                max_quantity: quentity,
+                status: status
+            }),
+            xhrFields: {
+                withCredentials: true,
+            },
+            success: function(response) {
+                $('#viewEditSchedule').modal('toggle');
+                $('#message-toast').toast('show');
+                $('#message-toast').addClass("bg-success");
+                $('#message-toast-body').html("Success!   New Schedule Successfully Created!");
+                loadData();
+                clearInputs(false);
+                viewEditPotions(false);
+            },
+            error: function(xhr) {
+                $('#viewEditScheduleErrorMessages').show();
+                if (xhr.errors) {
+                    $('#viewEditScheduleErrorMessages').html("Error!   Please fill all the required fields!");
+                } else {
+                    $('#viewEditScheduleErrorMessages').html("Error!   New Schedule Creation Failed!");
+                }
+            },
+        });
+    });
+
+    function clearInputs(isNew = true) {
+        if (isNew) {
+            $('#outlet-search-input').val(null);
+            $('#new-schedule-outlet-email').val(null);
+            $('#new-schedule-outlet-phoneNo').val(null);
+            $('#new-schedule-outlet-status').val(null);
+            $('#new-schedule-outlet-address').val(null);
+            $('#new-schedule-outlet-id').val(null);
+            $('#new-schedule-date').val(null);
+            $('#new-schedule-quentity').val(null);
+        } else {
+            $('#outlet-edit-search-input').val(null);
+            $('#view-schedule-outlet-name').val(null);
+            $('#view-schedule-outlet-email').val(null);
+            $('#view-schedule-outlet-phoneNo').val(null);
+            $('#view-schedule-outlet-status').val(null);
+            $('#view-schedule-outlet-address').val(null);
+            $('#edit-schedule-date').val(null);
+            $('#edit-schedule-max-quentity').val(null);
+            $('#edit-available-quentity').val(null);
+            $('#view-schedule-status').val(null);
+            $('#edit-schedule-status').val(null);
+            $('#edit-schedule-id').val(null);
+        }
     }
 </script>
 

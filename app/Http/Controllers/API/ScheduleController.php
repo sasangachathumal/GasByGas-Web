@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\schedule;
 use App\Models\outlet;
+use App\StatusType;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -16,7 +17,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
-            ->select('schedules.id', 'outlets.id', 'outlets.name', 'outlets.email', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->select('schedules.id as id', 'outlets.id as outlet_id', 'outlets.name', 'outlets.email', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
             ->get();
         return response()->json([
             'status' => true,
@@ -43,18 +44,29 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'status' => 'required',
             'outlet_id' => 'required|exists:outlets,id',
             'schedule_date' => 'required',
             'max_quantity' => 'required'
         ]);
 
-        $schedule = schedule::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Schedule created successfully',
-            'data' => $schedule
-        ], 201);
+        $schedule = schedule::create([
+            'outlet_id' => $request->outlet_id,
+            'schedule_date' => $request->schedule_date,
+            'max_quantity' => $request->max_quantity,
+            'status' => StatusType::Pending->value
+        ]);
+        if ($schedule) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Schedule created successfully',
+                'data' => $schedule
+            ], 201);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Schedule creation failed',
+            ], 400);
+        }
     }
 
     /**
