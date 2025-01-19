@@ -11,7 +11,7 @@
                         <div>
                             <h5 class="mb-0">All Schedules</h5>
                         </div>
-                        <button type="button" class="btn bg-gradient-primary  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newSchedule">
+                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newSchedule">
                             +&nbsp; New Schedule
                         </button>
                     </div>
@@ -79,7 +79,7 @@
                                 <label for="outlet-search-input" class="form-control-label">Search by outlet name</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="typeahead form-control" id="outlet-search-input" placeholder="Outlet Name" aria-label="Example text with two button addons" aria-describedby="button-addon3" required>
-                                    <button class="btn btn-outline-primary mb-0 btn-icon btn-2" type="button" onclick="searchOutlet(true)">
+                                    <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchOutlet(true)">
                                         <i class="fas fa-search"></i> Search
                                     </button>
                                 </div>
@@ -111,7 +111,7 @@
                                     <input class="form-control" required type="text" placeholder="200" id="new-schedule-quentity">
                                 </div>
                                 <input type="hidden" id="new-schedule-outlet-id">
-                                <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                                <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                             </div>
                         </div>
                     </form>
@@ -190,7 +190,7 @@
                                 <input type="hidden" id="edit-schedule-id">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <button type="button" id="edit-option-view-btn" onclick="viewEditPotions(true)" class="btn bg-gradient-primary w-100 mt-4 mb-0">
+                                        <button type="button" id="edit-option-view-btn" onclick="viewEditPotions(true)" class="btn bg-gradient-warning w-100 mt-4 mb-0">
                                             Edit
                                         </button>
                                     </div>
@@ -202,7 +202,7 @@
                                 </div>
                                 <div class="row" style="display: none;" id="edit-option-container">
                                     <div class="col-md-6">
-                                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save Changes</button>
+                                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                                     </div>
                                     <div class="col-md-6">
                                         <button type="button" onclick="viewEditPotions(false)" class="btn bg-gradient-secondary w-100 mt-4 mb-0">Cancel</button>

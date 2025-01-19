@@ -11,7 +11,7 @@
                         <div>
                             <h5 class="mb-0">All Gas</h5>
                         </div>
-                        <button type="button" class="btn bg-gradient-primary  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#new-gas-modal">
+                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#new-gas-modal">
                             +&nbsp; New Gas
                         </button>
                     </div>
@@ -69,7 +69,7 @@
                         <input class="form-control" type="text" required placeholder="200" id="new-gas-price-input">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>
@@ -102,7 +102,7 @@
                     </div>
                     <input type="hidden" required id="edit-gas-id-input">
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save Changes</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                     </div>
                 </form>
             </div>

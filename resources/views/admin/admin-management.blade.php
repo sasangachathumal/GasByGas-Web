@@ -11,7 +11,7 @@
                         <div>
                             <h5 class="mb-0">All Admins</h5>
                         </div>
-                        <button type="button" class="btn bg-gradient-primary  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newAdmin">
+                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newAdmin">
                             +&nbsp; New Admin
                         </button>
                     </div>
@@ -76,7 +76,7 @@
                         <input class="form-control" type="text" required placeholder="+9471 2823427" id="new-admin-phoneNo-input">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>
@@ -109,7 +109,7 @@
                     </div>
                     <input type="hidden" required id="edit-admin-id-input">
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save Changes</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                     </div>
                 </form>
             </div>
