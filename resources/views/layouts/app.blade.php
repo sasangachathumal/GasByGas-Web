@@ -14,20 +14,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <!DOCTYPE html>
-
-@if (\Request::is('rtl'))
-<html dir="rtl" lang="ar">
-@else
 <html lang="en">
-@endif
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    @if (env('IS_DEMO'))
-    <x-demo-metas></x-demo-metas>
-    @endif
     <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
     <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
@@ -49,6 +40,11 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
     <link href="../assets/css/jquery-confirm.min.css" rel="stylesheet" />
+    <style>
+        .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon {
+            background-image: linear-gradient(310deg, #f53939, #fbcf33);
+        }
+    </style>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -80,8 +76,6 @@
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/fullcalendar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
-    @stack('rtl')
-    @stack('dashboard')
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {

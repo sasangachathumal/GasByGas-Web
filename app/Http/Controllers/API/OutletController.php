@@ -40,6 +40,17 @@ class OutletController extends Controller
         ], 200);
     }
 
+    public function searchByName(Request $request)
+    {
+        $search = $request->input('search');
+        $result = outlet::where('name', 'like', '%'. $search. '%')->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Outlet data retrieved successfully',
+            'data' => $result
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -115,7 +126,6 @@ class OutletController extends Controller
             'name' => 'nullable|string',
             'phone_no' => 'nullable|string',
             'address' => 'nullable|string',
-            'status' => 'nullable|string',
         ]);
 
         $outlet = outlet::findOrFail($id);
@@ -124,7 +134,6 @@ class OutletController extends Controller
                 'name' => $request->name,
                 'phone_no' => $request->phone_no,
                 'address' => $request->address,
-                'status' => $request->status
             ]);
             if ($result > 0) {
                 return response()->json([

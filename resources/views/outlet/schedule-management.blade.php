@@ -11,7 +11,7 @@
                         <div>
                             <h5 class="mb-0">All Schedules</h5>
                         </div>
-                        <a href="#" class="btn bg-gradient-primary btn-sm mb-0" type="button">+&nbsp; New Schedule</a>
+                        <a href="#" class="btn bg-gradient-warning btn-sm mb-0" type="button">+&nbsp; New Schedule</a>
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">

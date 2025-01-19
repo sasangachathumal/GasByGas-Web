@@ -11,7 +11,7 @@
                         <div>
                             <h5 class="mb-0">All Admins</h5>
                         </div>
-                        <button type="button" class="btn bg-gradient-primary  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newAdmin">
+                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newAdmin">
                             +&nbsp; New Admin
                         </button>
                     </div>
@@ -76,7 +76,7 @@
                         <input class="form-control" type="text" required placeholder="+9471 2823427" id="new-admin-phoneNo-input">
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>
@@ -109,7 +109,7 @@
                     </div>
                     <input type="hidden" required id="edit-admin-id-input">
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save Changes</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -133,6 +133,8 @@
         $("#message-toast").toast();
         $("#editAdmin").modal();
         loadData();
+        clearInputs(true);
+        clearInputs(false);
     });
 
     function loadData() {
@@ -230,6 +232,7 @@
                                     $('#message-toast').addClass("bg-success");
                                     $('#message-toast-body').html("Success!   Admin Delete successfull");
                                     loadData();
+                                    clearInputs(false);
                                 })
                                 .fail(function() {
                                     $('#message-toast').toast('show');
@@ -328,6 +331,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!   New Admin Successfully Created!");
                 loadData();
+                clearInputs(true);
             },
             error: function(xhr) {
                 $('#newAdminErrorMessages').show();
@@ -369,6 +373,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Admin Update Successfull!");
                 loadData();
+                clearInputs(false);
             },
             error: function(xhr) {
                 $('#editAdminErrorMessages').show();
@@ -376,6 +381,17 @@
             },
         });
     });
+    function clearInputs(isNew = true) {
+        if (isNew) {
+            $('#new-admin-name-input').val(null);
+            $('#new-admin-email-input').val(null);
+            $('#new-admin-phoneNo-input').val(null);
+        } else {
+            $('#edit-admin-name-input').val(null);
+            $('#edit-admin-phoneNo-input').val(null);
+            $('#edit-admin-id-input').val(null);
+        }
+    }
 </script>
 
 @endsection

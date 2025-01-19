@@ -11,7 +11,7 @@
                         <div>
                             <h5 class="mb-0">All Outlets</h5>
                         </div>
-                        <button type="button" class="btn bg-gradient-primary  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newOutlet">
+                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newOutlet">
                             +&nbsp; New Outlet
                         </button>
                     </div>
@@ -86,7 +86,7 @@
                         <textarea class="form-control" id="new-outlet-address-input" required></textarea>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>
@@ -123,7 +123,7 @@
                     </div>
                     <input type="hidden" required id="edit-outlet-id-input">
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save Changes</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -168,7 +168,7 @@
                     </div>
                     <input type="hidden" required id="status-outlet-id-input">
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Save Changes</button>
+                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -192,6 +192,7 @@
         $("#message-toast").toast();
         $("#editOutlet").modal();
         loadData();
+        clearInputs();
     });
 
     function loadData() {
@@ -304,6 +305,7 @@
                                     $('#message-toast').addClass("bg-success");
                                     $('#message-toast-body').html("Success!   Outlet Delete successfull");
                                     loadData();
+                                    clearInputs();
                                 })
                                 .fail(function() {
                                     $('#message-toast').toast('show');
@@ -404,6 +406,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!   New Outlet Successfully Created!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#newOutletErrorMessages').show();
@@ -447,6 +450,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Outlet Update Successfull!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#editOutletErrorMessages').show();
@@ -486,6 +490,7 @@
                 $('#message-toast').addClass("bg-success");
                 $('#message-toast-body').html("Success!!   Outlet Update Successfull!");
                 loadData();
+                clearInputs();
             },
             error: function(xhr) {
                 $('#editOutletStatusErrorMessages').show();
@@ -493,6 +498,18 @@
             },
         });
     });
+
+    function clearInputs() {
+        $('#new-outlet-name-input').val(null);
+        $('#new-outlet-email-input').val(null);
+        $('#new-outlet-phoneNo-input').val(null);
+        $('#new-outlet-address-input').val(null);
+        $('#edit-outlet-name-input').val(null);
+        $('#edit-outlet-phoneNo-input').val(null);
+        $('#edit-outlet-address-input').val(null);
+        $('#edit-outlet-id-input').val(null);
+        $('#status-outlet-status-input').val(null);
+    }
 </script>
 
 @endsection

@@ -4,7 +4,7 @@ namespace App;
 
 enum RequestType: string
 {
-    case Consumer = 'CONSUMERS';
+    case Consumer = 'CONSUMER';
     case Business = 'BUSINESS';
     case Outlet = 'OUTLET';
 }
