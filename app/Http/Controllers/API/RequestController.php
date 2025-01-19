@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
+use App\ConsumerType;
 use App\Http\Controllers\Controller;
 
 use App\Models\requestModel;
 use App\Models\consumer;
 use App\Models\gas;
+use App\Models\outlet;
+use App\Models\schedule;
+use App\RequestStatusType;
+use App\StatusType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,11 +37,25 @@ class RequestController extends Controller
                 ->select('*')
                 ->first();
 
+            // Get schedule data for the current request
+            $scheduleData = schedule::query()
+                ->where('id', $request->schedule_id)
+                ->select('*')
+                ->first();
+
+            // Get outlet data for the current request
+            $outletData = outlet::query()
+                ->where('id', $scheduleData->outlet_id)
+                ->select('*')
+                ->first();
+
             // Return the combined data for the current request
             return [
                 'request' => $request,
                 'gas' => $gasData,
                 'consumer' => $consumerData,
+                'schedule' => $scheduleData,
+                'outlet' => $outletData
             ];
         });
 
@@ -69,11 +88,9 @@ class RequestController extends Controller
             'gas_id' => 'required|exists:gases,id',
             'type' => 'required|string',
             'quantity' => 'required|string',
-            'status' => 'required|string',
             'con_email' => 'required|email|string',
             'con_phone_no' => 'required|string',
             'con_type' => 'required|string',
-            'con_status' => 'required|string',
             'con_nic' => 'nullable|string',
             'con_business_no' => 'nullable|string',
         ]);
@@ -83,7 +100,7 @@ class RequestController extends Controller
             'gas_id' => $request->get('gas_id'),
             'type' => $request->get('type'),
             'quantity' => $request->get('quantity'),
-            'status' => $request->get('status'),
+            'status' => RequestStatusType::Pending->value,
             'expired_at' => date('Y-m-d', strtotime(now() . ' + 14 days')),
             'token' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 6)
         ]);
@@ -96,7 +113,7 @@ class RequestController extends Controller
                 'phone_no' => $request->get('con_phone_no'),
                 'type' => $request->get('con_type'),
                 'business_no' => $request->get('con_business_no'),
-                'status' => $request->get('con_status'),
+                'status' => StatusType::Approved->value,
             ]);
             if ($newConsumer) {
                 $newResponse = (object)array_merge((array)$newRequest, (array)$newConsumer);
@@ -145,17 +162,31 @@ class RequestController extends Controller
                 ->select('*')
                 ->first();
 
+            // Get schedule data for the current request
+            $scheduleData = schedule::query()
+                ->where('id', $request->schedule_id)
+                ->select('*')
+                ->first();
+
+            // Get outlet data for the current request
+            $outletData = outlet::query()
+                ->where('id', $scheduleData->outlet_id)
+                ->select('*')
+                ->first();
+
             // Return the combined data for the current request
             return [
                 'request' => $request,
                 'gas' => $gasData,
                 'consumer' => $consumerData,
+                'schedule' => $scheduleData,
+                'outlet' => $outletData
             ];
         });
         return response()->json([
             'status' => true,
             'message' => 'Request found successfully',
-            'data' => $combinedResults
+            'data' => $combinedResults->first() ?? (object)[]
         ], 200);
     }
 
