@@ -33,7 +33,7 @@ class ConsumerSeeder extends Seeder
             'nic' => null,
             'email' => 'cbusiness@gmail.com',
             'phone_no' => '+094710453447',
-            'type' => ConsumerType::Customer->value,
+            'type' => ConsumerType::Business->value,
             'business_no' => 'RTS-44552299C',
             'status' => StatusType::Approved->value,
             'created_at' => now(),

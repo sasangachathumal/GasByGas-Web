@@ -85,6 +85,19 @@ class ScheduleController extends Controller
         ], 200);
     }
 
+    public function getByOutletID($id)
+    {
+        $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
+            ->select('schedules.id', 'outlets.id as outlet_id', 'outlets.name as out_name', 'outlets.email as out_email', 'outlets.phone_no as out_phone_no', 'outlets.status as out_status', 'outlets.address as out_address', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->where('outlets.id', '=', $id)
+            ->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Schedules found successfully',
+            'data' => $scheduleData
+        ], 200);
+    }
+
     /**
      * Update the specified resource in storage.
      */

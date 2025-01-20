@@ -32,10 +32,11 @@ Route::middleware('web')->group(function () {
         Route::post('/login', [AuthenticationController::class, 'login']);
         Route::post('/forgot-password', [AuthenticationController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthenticationController::class, 'resetPassword']);
-        Route::post('/me', [AuthenticationController::class, 'me'])->middleware('auth:sanctum');
+        // Route::post('/me', [AuthenticationController::class, 'me'])->middleware('auth:sanctum');
         Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
 
         Route::get('/users', [UserController::class, 'index']);
+        Route::get('/me', [UserController::class, 'me']);
 
         Route::get('/admin', [AdminController::class, 'index']);
         Route::post('/admin', [AdminController::class, 'store']);
@@ -47,6 +48,7 @@ Route::middleware('web')->group(function () {
         Route::get('/schedule/count', [ScheduleController::class, 'count']);
         Route::post('/schedule', [ScheduleController::class, 'store']);
         Route::get('/schedule/{id}', [ScheduleController::class, 'show']);
+        Route::get('/schedule/outlet/{id}', [ScheduleController::class, 'getByOutletID']);
         Route::put('/schedule/{id}', [ScheduleController::class, 'update']);
         Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy']);
 

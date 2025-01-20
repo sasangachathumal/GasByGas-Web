@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 use App\Models\admin;
 use App\Models\outlet;
+use App\UserType;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -67,6 +69,37 @@ class UserController extends Controller
                 'message' => 'All users retrieved successfully',
                 'data' => $outletOnlyData
             ], 200);
+        }
+    }
+
+    public function me()
+    {
+        $user = Auth::user();
+        if ($user && $user->type === UserType::Admin->value) {
+            $adminQuery = Admin::join('users', 'admins.user_id', '=', 'users.id')
+                ->select('users.id as user_id', 'users.type as user_type', 'admins.*')
+                ->where('outlets.user_id', '=', $user->id)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'user retrieved successfully',
+                'data' => $adminQuery->first() ?? (object)[]
+            ], 200);
+        } else if ($user && $user->type === UserType::Outlet->value) {
+            $outletQuery = Outlet::join('users', 'outlets.user_id', '=', 'users.id')
+                ->select('users.id as user_id', 'users.type as user_type', 'outlets.*')
+                ->where('outlets.user_id', '=', $user->id)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'user retrieved successfully',
+                'data' => $outletQuery->first() ?? (object)[]
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User Not Found'
+            ], 400);
         }
     }
 
