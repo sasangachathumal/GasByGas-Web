@@ -90,7 +90,7 @@ class ConsumerController extends Controller
     {
         $consumerQuery = consumer::join('users', 'consumers.user_id', '=', 'users.id')
             ->select('users.id as user_id', 'users.type as user_type', 'consumers.*')
-            ->where('consumers.user_id', '=', $id)
+            ->where('consumers.id', '=', $id)
             ->get();
         if ($consumerQuery) {
             return response()->json([

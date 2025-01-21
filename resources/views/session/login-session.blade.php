@@ -18,7 +18,7 @@
                                     @csrf
                                     <label>Email</label>
                                     <div class="mb-3">
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="outlet@softui.com" aria-label="Email" aria-describedby="email-addon">
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="" aria-label="Email" aria-describedby="email-addon">
                                         @error('email')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                         @enderror
@@ -103,8 +103,11 @@
                             if (loginResponse.user.type === "ADMIN") {
                                 window.location.href = "/admin/dashboard";
                             }
-                            if (loginResponse.user.type === "OUTLET") {
+                            if (loginResponse.user.type === "OUTLET_MANAGER") {
                                 window.location.href = "/outlet/dashboard";
+                            }
+                            if (loginResponse.user.type === "CONSUMER") {
+                                window.location.href = "/";
                             }
                         },
                         error: function(xhr) {

@@ -88,7 +88,7 @@ class OutletManagerController extends Controller
     {
         $outletManagerQuery = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
             ->select('users.id as user_id', 'users.type as user_type', 'outlet_managers.*')
-            ->where('outlet_managers.user_id', '=', $id)
+            ->where('outlet_managers.id', '=', $id)
             ->get();
         if ($outletManagerQuery) {
             return response()->json([

@@ -88,7 +88,7 @@ class AdminController extends Controller
     {
         $adminQuery = Admin::join('users', 'admins.user_id', '=', 'users.id')
             ->select('users.id as user_id', 'users.type as user_type', 'admins.*')
-            ->where('admins.user_id', '=', $id)
+            ->where('admins.id', '=', $id)
             ->get();
         if ($adminQuery) {
             return response()->json([
