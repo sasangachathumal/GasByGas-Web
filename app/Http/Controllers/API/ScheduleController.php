@@ -17,7 +17,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
-            ->select('schedules.id as id', 'outlets.id as outlet_id', 'outlets.name', 'outlets.email', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->select('schedules.id as id', 'outlets.id as outlet_id', 'outlets.name', 'outlets.email', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
             ->get();
         return response()->json([
             'status' => true,
@@ -53,6 +53,7 @@ class ScheduleController extends Controller
             'outlet_id' => $request->outlet_id,
             'schedule_date' => $request->schedule_date,
             'max_quantity' => $request->max_quantity,
+            'available_quantity' => $request->max_quantity,
             'status' => StatusType::Pending->value
         ]);
         if ($schedule) {
@@ -75,7 +76,7 @@ class ScheduleController extends Controller
     public function show($id)
     {
         $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
-            ->select('schedules.id', 'outlets.id as outlet_id', 'outlets.name as out_name', 'outlets.email as out_email', 'outlets.phone_no as out_phone_no', 'outlets.status as out_status', 'outlets.address as out_address', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->select('schedules.id', 'outlets.id as outlet_id', 'outlets.name as out_name', 'outlets.email as out_email', 'outlets.phone_no as out_phone_no', 'outlets.address as out_address', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
             ->where('schedules.id', '=', $id)
             ->get();
         return response()->json([
@@ -88,7 +89,7 @@ class ScheduleController extends Controller
     public function getByOutletID($id)
     {
         $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
-            ->select('schedules.id', 'outlets.id as outlet_id', 'outlets.name as out_name', 'outlets.email as out_email', 'outlets.phone_no as out_phone_no', 'outlets.status as out_status', 'outlets.address as out_address', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->select('schedules.id', 'outlets.id as outlet_id', 'outlets.name as out_name', 'outlets.email as out_email', 'outlets.phone_no as out_phone_no', 'outlets.address as out_address', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
             ->where('outlets.id', '=', $id)
             ->get();
         return response()->json([
@@ -105,7 +106,6 @@ class ScheduleController extends Controller
     {
         $request->validate([
             'status' => 'nullable',
-            'outlet_id' => 'prohibited',
             'schedule_date' => 'nullable',
             'max_quantity' => 'nullable'
         ]);

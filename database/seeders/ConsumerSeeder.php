@@ -33,7 +33,7 @@ class ConsumerSeeder extends Seeder
             'phone_no' => '+094710453447',
             'type' => ConsumerType::Business->value,
             'business_no' => 'RTS-44552299C',
-            'status' => StatusType::Approved->value,
+            'status' => StatusType::Pending->value,
             'created_at' => now(),
             'updated_at' => now()
         ]);

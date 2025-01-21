@@ -1,39 +1,38 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
-use App\Models\admin;
-use App\Models\User;
-use App\UserType;
+use App\Models\outlet_manager;
 use Illuminate\Http\Request;
+use App\Models\outlet;
+use App\Models\User;
+use App\StatusType;
+use App\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
-class AdminController extends Controller
+class OutletManagerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $adminOnlyData = Admin::join('users', 'admins.user_id', '=', 'users.id')
-            ->select('users.id as user_id', 'users.type', 'users.email', 'admins.id', 'admins.name', 'admins.phone_no')
+        $outletManageruery = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
+            ->select('users.id as user_id', 'users.type as user_type', 'outlet_managers.*')
             ->get();
-
-        if ($adminOnlyData) {
+        if ($outletManageruery) {
             return response()->json([
                 'status' => true,
-                'message' => 'Admins retrieved successfully',
-                'data' => $adminOnlyData
+                'message' => 'outlet manager retrieved successfully',
+                'data' => $outletManageruery
             ], 200);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Admins retrieved Failed',
+                'message' => 'outlet manager retrieved fail',
             ], 400);
         }
     }
@@ -47,30 +46,31 @@ class AdminController extends Controller
             'email' => 'required|email',
             'name' => 'required|string',
             'phone_no' => 'required|string',
+            'outlet_id' => 'required'
         ]);
 
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make('secret'),
-            'type' =>  UserType::Admin->value
+            'type' =>  UserType::Outlet_Manager->value
         ]);
-
         if ($user) {
-            $admin = admin::create([
+            $outlet_manager = outlet_manager::create([
                 'user_id' => $user->id,
                 'name' => $request->name,
-                'phone_no' => $request->phone_no
+                'phone_no' => $request->phone_no,
+                'outlet_id' => $request->outlet_id,
             ]);
-            if ($admin) {
+            if ($outlet_manager) {
                 return response()->json([
                     'status' => true,
-                    'message' => 'Admin created successfully',
-                    'data' => $admin
+                    'message' => 'outlet manager created successfully',
+                    'data' => $outlet_manager
                 ], 201);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Admin creation failed',
+                    'message' => 'outlet manager creation failed',
                 ], 400);
             }
         } else {
@@ -86,20 +86,20 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        $adminQuery = Admin::join('users', 'admins.user_id', '=', 'users.id')
-            ->select('users.id as user_id', 'users.type as user_type', 'admins.*')
-            ->where('admins.user_id', '=', $id)
+        $outletManagerQuery = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
+            ->select('users.id as user_id', 'users.type as user_type', 'outlet_managers.*')
+            ->where('outlet_managers.user_id', '=', $id)
             ->get();
-        if ($adminQuery) {
+        if ($outletManagerQuery) {
             return response()->json([
                 'status' => true,
-                'message' => 'user retrieved successfully',
-                'data' => $adminQuery->first() ?? (object)[]
+                'message' => 'outlet manager retrieved successfully',
+                'data' => $outletManagerQuery->first() ?? (object)[]
             ], 200);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'user retrieved fail',
+                'message' => 'outlet manager retrieved fail',
             ], 400);
         }
     }
@@ -110,32 +110,33 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'nullable|string',
-            'phone_no' => 'nullable|string'
+            'name' => 'nullable',
+            'phone_no' => 'nullable',
         ]);
 
-        $admin = admin::findOrFail($id);
-        if ($admin) {
-            $result = $admin->update([
+        $outletManager = outlet_manager::findOrFail($id);
+        if ($outletManager) {
+            $result = $outletManager->update([
                 'name' => $request->name,
-                'phone_no' => $request->phone_no
+                'phone_no' => $request->phone_no,
+                'address' => $request->address,
             ]);
             if ($result > 0) {
                 return response()->json([
                     'status' => true,
-                    'message' => 'Admin updated successfully',
-                    'data' => $admin
+                    'message' => 'outlet manager updated successfully',
+                    'data' => $outletManager
                 ], 201);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Admin updated failed'
+                    'message' => 'outlet manager updated failed'
                 ], 400);
             }
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Admin not found'
+                'message' => 'outlet manager not found'
             ], 400);
         }
     }
@@ -145,25 +146,25 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $admin = admin::findOrFail($id);
-        if ($admin) {
-            $user = User::query()->where('id', '=', $admin->user_id)->firstOrFail();
+        $outletManager = outlet_manager::findOrFail($id);
+        if ($outletManager) {
+            $user = User::query()->where('id', '=', $outletManager->user_id)->firstOrFail();
             if ($user) {
                 $user->delete();
                 return response()->json([
                     'status' => true,
-                    'message' => 'Admin user deleted successfully'
+                    'message' => 'outlet manager deleted successfully'
                 ], 200);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Admin not found'
+                    'message' => 'outlet manager not found'
                 ], 400);
             }
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Admin not found'
+                'message' => 'outlet manager not found'
             ], 400);
         }
     }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\admin;
+use App\Models\consumer;
 use App\Models\outlet;
 use App\UserType;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,7 @@ class UserController extends Controller
             ], 200);
         }
 
-        if ($usertype && $usertype == 'outlet') {
+        if ($usertype && $usertype == 'outlet_manager') {
             $outletQuery = Outlet::join('users', 'outlets.user_id', '=', 'users.id')
                 ->select('users.id', 'users.type', 'outlets.email', 'outlets.name', 'outlets.phone_no', 'outlets.address', 'outlets.status');
             if ($outletStatus) {
@@ -78,14 +79,14 @@ class UserController extends Controller
         if ($user && $user->type === UserType::Admin->value) {
             $adminQuery = Admin::join('users', 'admins.user_id', '=', 'users.id')
                 ->select('users.id as user_id', 'users.type as user_type', 'admins.*')
-                ->where('outlets.user_id', '=', $user->id)
+                ->where('admins.user_id', '=', $user->id)
                 ->get();
             return response()->json([
                 'status' => true,
                 'message' => 'user retrieved successfully',
                 'data' => $adminQuery->first() ?? (object)[]
             ], 200);
-        } else if ($user && $user->type === UserType::Outlet->value) {
+        } else if ($user && $user->type === UserType::Outlet_Manager->value) {
             $outletQuery = Outlet::join('users', 'outlets.user_id', '=', 'users.id')
                 ->select('users.id as user_id', 'users.type as user_type', 'outlets.*')
                 ->where('outlets.user_id', '=', $user->id)
@@ -94,6 +95,16 @@ class UserController extends Controller
                 'status' => true,
                 'message' => 'user retrieved successfully',
                 'data' => $outletQuery->first() ?? (object)[]
+            ], 200);
+        } else if ($user && $user->type === UserType::Consumer->value) {
+            $consumerQuery = consumer::join('users', 'consumers.user_id', '=', 'users.id')
+                ->select('users.id as user_id', 'users.type as user_type', 'consumers.*')
+                ->where('consumers.user_id', '=', $user->id)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'consumer retrieved successfully',
+                'data' => $consumerQuery->first() ?? (object)[]
             ], 200);
         } else {
             return response()->json([

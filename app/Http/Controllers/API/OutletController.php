@@ -43,7 +43,7 @@ class OutletController extends Controller
     public function searchByName(Request $request)
     {
         $search = $request->input('search');
-        $result = outlet::where('name', 'like', '%'. $search. '%')->get();
+        $result = outlet::where('name', 'like', '%' . $search . '%')->get();
         return response()->json([
             'status' => true,
             'message' => 'Outlet data retrieved successfully',
@@ -60,39 +60,25 @@ class OutletController extends Controller
             'email' => 'required|email',
             'name' => 'required|string',
             'phone_no' => 'required|string',
-            'address' => 'required|string',
+            'address' => 'required|string'
         ]);
 
-        $user = User::create([
+        $outlet = outlet::create([
             'email' => $request->email,
-            'password' => Hash::make('secret'),
-            'type' => 'OUTLET'
+            'name' => $request->name,
+            'phone_no' => $request->phone_no,
+            'address' => $request->address
         ]);
-        if ($user) {
-            $outlet = outlet::create([
-                'user_id' => $user->id,
-                'email' => $request->email,
-                'name' => $request->name,
-                'phone_no' => $request->phone_no,
-                'address' => $request->address,
-                'status' => StatusType::Pending->value
-            ]);
-            if ($outlet) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Outlet created successfully',
-                    'data' => $outlet
-                ], 201);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Outlet creation failed',
-                ], 400);
-            }
+        if ($outlet) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Outlet created successfully',
+                'data' => $outlet
+            ], 201);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'User creation failed',
+                'message' => 'Outlet creation failed',
             ], 400);
         }
     }
@@ -155,48 +141,17 @@ class OutletController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|string',
-        ]);
-
-        $outlet = outlet::findOrFail($id);
-        if ($outlet) {
-            $result = $outlet->update([
-                'status' => $request->status
-            ]);
-            if ($result > 0) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Outlet status updated successfully',
-                    'data' => $outlet
-                ], 201);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Outlet status updated failed'
-                ], 400);
-            }
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Outlet not found'
-            ], 400);
-        }
-    }
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $user = User::query()->where('id', '=', $id)->firstOrFail();
-        if ($user) {
-            $user->delete();
+        $outlet = outlet::findOrFail($id);
+        if ($outlet) {
+            $outlet->delete();
             return response()->json([
                 'status' => true,
-                'message' => 'Outlet user deleted successfully'
+                'message' => 'Outlet deleted successfully'
             ], 204);
         } else {
             return response()->json([
