@@ -20,8 +20,9 @@ class requestModel extends Model
      */
     protected $fillable = [
         'schedule_id',
-        'status',
         'gas_id',
+        'consumer_id',
+        'status',
         'type',
         'token',
         'quantity',

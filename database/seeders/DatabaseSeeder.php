@@ -18,10 +18,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AdminSeeder::class,
             OutletSeeder::class,
+            OutletManagerSeeder::class,
             GasSeeder::class,
             ScheduleSeeder::class,
-            RequestSeeder::class,
             ConsumerSeeder::class,
+            RequestSeeder::class,
         ]);
     }
 }

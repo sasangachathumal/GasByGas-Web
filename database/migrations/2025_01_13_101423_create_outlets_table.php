@@ -14,12 +14,10 @@ return new class extends Migration
     {
         Schema::create('outlets', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('email')->unique();
             $table->string('name');
             $table->string('address');
             $table->string('phone_no');
-            $table->enum('status', array_column(StatusType::cases(), 'value'))->default(StatusType::Pending->value);
             $table->timestamps();
         });
     }

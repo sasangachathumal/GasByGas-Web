@@ -15,9 +15,8 @@ return new class extends Migration
     {
         Schema::create('consumers', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('request_id')->constrained('requests')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nic')->nullable();
-            $table->string('email');
             $table->string('phone_no');
             $table->enum('type', array_column(ConsumerType::cases(), 'value'))->default(ConsumerType::Customer->value);
             $table->string('business_no')->nullable();

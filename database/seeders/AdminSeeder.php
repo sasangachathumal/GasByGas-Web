@@ -16,7 +16,6 @@ class AdminSeeder extends Seeder
     {
         DB::table('admins')->insert([
             'user_id' => 1,
-            'email' => 'admin@softui.com',
             'name' => 'Admin',
             'phone_no' => '+094710453447',
             'created_at' => now(),

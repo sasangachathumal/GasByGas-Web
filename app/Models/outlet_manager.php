@@ -7,7 +7,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
-class outlet extends Model
+class outlet_manager extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,9 +17,9 @@ class outlet extends Model
      * @var string[]
      */
     protected $fillable = [
-        'email',
+        'user_id',
+        'outlet_id',
         'name',
-        'address',
-        'phone_no'
+        'phone_no',
     ];
 }
