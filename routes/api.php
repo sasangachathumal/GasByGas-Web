@@ -55,6 +55,7 @@ Route::middleware('web')->group(function () {
         Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy']);
 
         Route::get('/consumer', [ConsumerController::class, 'index']);
+        Route::get('/consumer/count', [ConsumerController::class, 'count']);
         Route::post('/consumer', [ConsumerController::class, 'store']);
         Route::get('/consumer/{id}', [ConsumerController::class, 'show']);
         Route::put('/consumer/{id}', [ConsumerController::class, 'update']);

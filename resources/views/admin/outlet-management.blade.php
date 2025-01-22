@@ -37,16 +37,13 @@
                                         Phone No
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Status
-                                    </th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Action
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="userTableBody">
                                 <tr>
-                                    <td colspan="7">Loading Outlets ....</td>
+                                    <td colspan="6">Loading Outlets ....</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,51 +131,6 @@
     </div>
 </div>
 
-<!-- Outlet Status Edit -->
-<div class="modal fade show" id="editOutletStatus" tabindex="-1" role="dialog" aria-labelledby="editOutletStatusModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title font-weight-normal" id="editOutletStatusModalLabel">Update Outlet Status</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="edit-outlet-status-form" role="form" method="PUT">
-                    <div class="form-group">
-                        <label for="outlet-name-input" class="form-control-label">Outlet Name</label>
-                        <input class="form-control" type="text" readonly placeholder="John Snow" id="status-outlet-name-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">Outlet Phone No</label>
-                        <input class="form-control" type="text" readonly placeholder="+9471 2823427" id="status-outlet-phoneNo-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">outlet Address</label>
-                        <textarea class="form-control" id="status-outlet-address-input" readonly></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">outlet Status</label>
-                        <select class="form-control" id="status-outlet-status-input">
-                            <option value="PENDING">Pending</option>
-                            <option value="APPROVED">Approved</option>
-                            <option value="REJECTED">Rejected</option>
-                        </select>
-                    </div>
-                    <input type="hidden" required id="status-outlet-id-input">
-                    <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="alert alert-danger text-white" style="display: none;" role="alert" id="editOutletStatusErrorMessages"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="toast-container position-fixed top-2 end-0 p-3">
     <div id="message-toast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
@@ -230,11 +182,7 @@
                             <td class='align-middle text-center'>${outlet.name ? outlet.name : '~none~'}</td>
                             <td class='align-middle text-center'>${outlet.address ? outlet.address : '~none~'}</td>
                             <td class='align-middle text-center'>${outlet.phone_no ? outlet.phone_no : '~none~'}</td>
-                            <td class='align-middle text-center'>${outlet.status ? outlet.status : '~none~'}</td>
                             <td class='align-middle text-center'>
-                                <span>
-                                    <i class="cursor-pointer fas fa-tools text-secondary mx-3" onclick="viewSelectedOutlet(${outlet.id}, 'status')"></i>
-                                </span>
                                 <span>
                                     <i class="cursor-pointer fas fa-pencil-alt text-secondary mx-3" onclick="viewSelectedOutlet(${outlet.id})"></i>
                                 </span>
@@ -255,20 +203,11 @@
             getSingleOutlet(outletID)
                 .done(function(result) {
                     if (result.data && result.data.id) {
-                        if (action === "status") {
-                            $('#status-outlet-id-input').val(result.data.id);
-                            $('#status-outlet-name-input').val(result.data.name);
-                            $('#status-outlet-phoneNo-input').val(result.data.phone_no);
-                            $('#status-outlet-address-input').val(result.data.address);
-                            $('#status-outlet-status-input').val(result.data.status);
-                            $("#editOutletStatus").modal('toggle');
-                        } else {
-                            $('#edit-outlet-id-input').val(result.data.id);
-                            $('#edit-outlet-name-input').val(result.data.name);
-                            $('#edit-outlet-phoneNo-input').val(result.data.phone_no);
-                            $('#edit-outlet-address-input').val(result.data.address);
-                            $("#editOutlet").modal('toggle');
-                        }
+                        $('#edit-outlet-id-input').val(result.data.id);
+                        $('#edit-outlet-name-input').val(result.data.name);
+                        $('#edit-outlet-phoneNo-input').val(result.data.phone_no);
+                        $('#edit-outlet-address-input').val(result.data.address);
+                        $("#editOutlet").modal('toggle');
                     } else {
                         $('#message-toast').toast('show');
                         $('#message-toast').addClass("bg-danger");
@@ -459,46 +398,6 @@
         });
     });
 
-    $('#edit-outlet-status-form').on('submit', function(e) {
-        e.preventDefault();
-
-        // Get CSRF token from meta tag
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-        // Collect form data
-        const id = $('#status-outlet-id-input').val();
-        const status = $('#status-outlet-status-input').val();
-
-        // Make an AJAX POST request
-        $.ajax({
-            url: '/api/v1/outlet/status/' + id,
-            method: 'PUT',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Accept': 'application/json',
-            },
-            contentType: 'application/json',
-            data: JSON.stringify({
-                status: status,
-            }),
-            xhrFields: {
-                withCredentials: true,
-            },
-            success: function(response) {
-                $('#editOutletStatus').modal('toggle');
-                $('#message-toast').toast('show');
-                $('#message-toast').addClass("bg-success");
-                $('#message-toast-body').html("Success!!   Outlet Update Successfull!");
-                loadData();
-                clearInputs();
-            },
-            error: function(xhr) {
-                $('#editOutletStatusErrorMessages').show();
-                $('#editOutletStatusErrorMessages').html("Error!!   Outlet Update Failed!");
-            },
-        });
-    });
-
     function clearInputs() {
         $('#new-outlet-name-input').val(null);
         $('#new-outlet-email-input').val(null);
@@ -508,7 +407,6 @@
         $('#edit-outlet-phoneNo-input').val(null);
         $('#edit-outlet-address-input').val(null);
         $('#edit-outlet-id-input').val(null);
-        $('#status-outlet-status-input').val(null);
     }
 </script>
 

@@ -10,6 +10,7 @@ use App\Models\consumer;
 use App\Models\gas;
 use App\Models\outlet;
 use App\Models\schedule;
+use App\Models\User;
 use App\RequestStatusType;
 use App\StatusType;
 use Illuminate\Http\Request;
@@ -36,6 +37,14 @@ class RequestController extends Controller
                 ->where('id', $request->consumer_id)
                 ->select('*')
                 ->first();
+
+            // Get user email data for the current request
+            $consumerEmail = User::query()
+                ->select('email')
+                ->where('id', $consumerData->user_id)
+                ->first();
+
+            $consumerData->email = $consumerEmail->email;
 
             // Get schedule data for the current request
             $scheduleData = schedule::query()
@@ -139,6 +148,14 @@ class RequestController extends Controller
                 ->where('id', $request->consumer_id)
                 ->select('*')
                 ->first();
+
+            // Get user email data for the current request
+            $consumerEmail = User::query()
+                ->select('email')
+                ->where('id', $consumerData->user_id)
+                ->first();
+
+            $consumerData->email = $consumerEmail->email;
 
             // Get schedule data for the current request
             $scheduleData = schedule::query()

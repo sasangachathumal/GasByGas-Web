@@ -17,7 +17,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $scheduleData = schedule::join('outlets', 'schedules.outlet_id', '=', 'outlets.id')
-            ->select('schedules.id as id', 'outlets.id as outlet_id', 'outlets.name', 'outlets.email', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
+            ->select('schedules.id as id', 'outlets.id as outlet_id', 'outlets.name', 'outlets.email', 'schedules.status', 'schedules.schedule_date', 'schedules.max_quantity', 'schedules.available_quantity')
             ->get();
         return response()->json([
             'status' => true,

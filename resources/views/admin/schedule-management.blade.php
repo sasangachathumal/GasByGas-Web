@@ -84,16 +84,16 @@
                                     </button>
                                 </div>
                                 <div class="form-group">
+                                    <label for="new-schedule-outlet-name" class="form-control-label">Outlet Name</label>
+                                    <input class="form-control" type="text" readonly id="new-schedule-outlet-name">
+                                </div>
+                                <div class="form-group">
                                     <label for="new-schedule-outlet-email" class="form-control-label">Outlet Email</label>
                                     <input class="form-control" type="text" readonly id="new-schedule-outlet-email">
                                 </div>
                                 <div class="form-group">
                                     <label for="new-schedule-outlet-phoneNo" class="form-control-label">Outlet Phone No</label>
                                     <input class="form-control" type="text" readonly id="new-schedule-outlet-phoneNo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="new-schedule-outlet-status" class="form-control-label">Outlet Status</label>
-                                    <input class="form-control" type="text" readonly id="new-schedule-outlet-status">
                                 </div>
                                 <div class="form-group">
                                     <label for="new-schedule-outlet-address" class="form-control-label">Outlet Address</label>
@@ -151,10 +151,6 @@
                                 <div class="form-group">
                                     <label for="view-schedule-outlet-phoneNo" class="form-control-label">Outlet Phone No</label>
                                     <input class="form-control" type="text" readonly id="view-schedule-outlet-phoneNo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="view-schedule-outlet-status" class="form-control-label">Outlet Status</label>
-                                    <input class="form-control" type="text" readonly id="view-schedule-outlet-status">
                                 </div>
                                 <div class="form-group">
                                     <label for="view-schedule-outlet-address" class="form-control-label">Outlet Address</label>
@@ -322,7 +318,6 @@
                         $('#outlet-edit-search-input').val(result.data.out_name);
                         $('#view-schedule-outlet-email').val(result.data.out_email);
                         $('#view-schedule-outlet-phoneNo').val(result.data.out_phone_no);
-                        $('#view-schedule-outlet-status').val(result.data.out_status);
                         $('#view-schedule-outlet-address').val(result.data.out_address);
 
                         $('#edit-schedule-date').val(result.data.schedule_date);
@@ -463,7 +458,7 @@
                         $('#new-schedule-outlet-id').val(response.data[0].id);
                         $('#new-schedule-outlet-email').val(response.data[0].email);
                         $('#new-schedule-outlet-phoneNo').val(response.data[0].phone_no);
-                        $('#new-schedule-outlet-status').val(response.data[0].status);
+                        $('#new-schedule-outlet-name').val(response.data[0].name);
                         $('#new-schedule-outlet-address').val(response.data[0].address);
                     }
                 } else {
@@ -593,7 +588,6 @@
             $('#view-schedule-outlet-name').val(null);
             $('#view-schedule-outlet-email').val(null);
             $('#view-schedule-outlet-phoneNo').val(null);
-            $('#view-schedule-outlet-status').val(null);
             $('#view-schedule-outlet-address').val(null);
             $('#edit-schedule-date').val(null);
             $('#edit-schedule-max-quentity').val(null);

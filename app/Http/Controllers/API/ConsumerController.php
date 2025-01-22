@@ -106,6 +106,18 @@ class ConsumerController extends Controller
         }
     }
 
+    public function count()
+    {
+        $consumerDataCount = consumer::query()
+            ->get()
+            ->count();
+        return response()->json([
+            'status' => true,
+            'message' => 'Consumer count retrieved successfully',
+            'data' => $consumerDataCount
+        ], 200);
+    }
+
     /**
      * Update the specified resource in storage.
      */
