@@ -11,6 +11,7 @@ use App\Http\Controllers\API\OutletController;
 use App\Http\Controllers\API\RequestController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('web')->group(function () {
     Route::prefix('v1')->group(function () {
         Route::post('/login', [AuthenticationController::class, 'login']);
+        Route::post('/register', [RegisterController::class, 'store']);
         Route::post('/forgot-password', [AuthenticationController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthenticationController::class, 'resetPassword']);
         // Route::post('/me', [AuthenticationController::class, 'me'])->middleware('auth:sanctum');

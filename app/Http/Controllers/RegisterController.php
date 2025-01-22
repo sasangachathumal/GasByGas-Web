@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\ConsumerType;
+use App\Models\consumer;
 use App\Models\User;
+use App\StatusType;
+use App\UserType;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -19,17 +24,51 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = request()->validate([
-            'email' => ['required', 'email', 'max:50', Rule::unique('users', 'email')],
-            'password' => ['required', 'min:5', 'max:20'],
-            'agreement' => ['accepted']
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'agreement' => 'accepted',
+            'type' => 'required',
+            'nic' => 'nullable',
+            'phone_no' => 'required',
+            'business_no' => 'nullable'
         ]);
-        $attributes['password'] = bcrypt($attributes['password'] );
 
-        session()->flash('success', 'Your account has been created.');
-        $user = User::create($attributes);
-        Auth::login($user);
-        return redirect('/dashboard');
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'type' =>  UserType::Consumer->value,
+            'agreement' => $request->agreement
+        ]);
+        if ($user) {
+            $consumer = consumer::create([
+                'user_id' => $user->id,
+                'phone_no' => $request->phone_no,
+                'type' => $request->type,
+                'nic' => $request->nic ? $request->nic : null,
+                'business_no' => $request->business_no ? $request->business_no : null,
+                'status' => $request->type == ConsumerType::Business->value ? StatusType::Pending->value : StatusType::Approved->value
+            ]);
+            if ($consumer) {
+                session()->flash('success', 'Your account has been created.');
+                $authUser = Auth::login($user);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Registration successful',
+                    'user' => $authUser
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Admin creation failed',
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User creation failed',
+            ], 400);
+        }
     }
 
     /**
