@@ -28,7 +28,7 @@ class OutletSeeder extends Seeder
             'email' => 'outlet2@gasbygas.com',
             'name' => 'SDF Gas Mart',
             'address' => 'Pinkanda, Dodanduwa.',
-            'phone_no' => '+094710453447',
+            'phone_no' => '+094710873447',
             'created_at' => now(),
             'updated_at' => now()
         ]);

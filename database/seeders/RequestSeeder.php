@@ -20,7 +20,7 @@ class RequestSeeder extends Seeder
             'schedule_id' => 1,
             'gas_id' => 1,
             'consumer_id' => 1,
-            'type' => RequestType::Costomer->value,
+            'type' => RequestType::Customer->value,
             'status' => RequestStatusType::Pending->value,
             'token' => 'GAS-00534',
             'quantity' => 1,

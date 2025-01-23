@@ -29,8 +29,8 @@ class ConsumerSeeder extends Seeder
 
         DB::table('consumers')->insert([
             'user_id' => 5,
-            'nic' => null,
-            'phone_no' => '+094710453447',
+            'nic' => '098765434567',
+            'phone_no' => '+094710093447',
             'type' => ConsumerType::Business->value,
             'business_no' => 'RTS-44552299C',
             'status' => StatusType::Pending->value,

@@ -15,9 +15,9 @@ return new class extends Migration
         Schema::create('outlets', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('email')->unique();
-            $table->string('name');
-            $table->string('address');
-            $table->string('phone_no');
+            $table->string('name')->unique();
+            $table->string('address')->unique();
+            $table->string('phone_no')->unique();
             $table->timestamps();
         });
     }

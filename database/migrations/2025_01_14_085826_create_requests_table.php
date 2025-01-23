@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('schedule_id')->constrained('schedules')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('gas_id')->constrained('gas')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('consumer_id')->constrained('consumers')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->enum('type', array_column(RequestType::cases(), 'value'))->default(RequestType::Costomer->value);
+            $table->enum('type', array_column(RequestType::cases(), 'value'))->default(RequestType::Customer->value);
             $table->enum('status', array_column(RequestStatusType::cases(), 'value'))->default(RequestStatusType::Pending->value);
-            $table->string('token');
+            $table->string('token')->unique();
             $table->integer('quantity');
             $table->date('expired_at');
             $table->timestamps();

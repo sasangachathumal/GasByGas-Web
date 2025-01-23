@@ -57,6 +57,7 @@ Route::middleware('web')->group(function () {
 
         Route::get('/consumer', [ConsumerController::class, 'index']);
         Route::get('/consumer/count', [ConsumerController::class, 'count']);
+        Route::get('/consumer/search', [ConsumerController::class, 'searchByNIC']);
         Route::post('/consumer', [ConsumerController::class, 'store']);
         Route::get('/consumer/{id}', [ConsumerController::class, 'show']);
         Route::put('/consumer/{id}', [ConsumerController::class, 'update']);
@@ -66,6 +67,7 @@ Route::middleware('web')->group(function () {
         Route::get('/request/count', [RequestController::class, 'count']);
         Route::post('/request', [RequestController::class, 'store']);
         Route::get('/request/{id}', [RequestController::class, 'show']);
+        Route::get('/request/token/{token}', [RequestController::class, 'searchByToken']);
         Route::put('/request/status/{id}', [RequestController::class, 'updateRequestStatus']);
         Route::put('/request/consumer/status/{id}', [RequestController::class, 'updateRequestConsumerStatus']);
         Route::put('/request/consumer/{id}', [RequestController::class, 'assignRequestToNewConsumer']);

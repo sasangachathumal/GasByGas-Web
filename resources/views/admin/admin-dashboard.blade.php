@@ -90,71 +90,85 @@
 </div>
 <div class="row mt-4">
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/gas-request-management') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Gas Request Management</h4>
+        <a href="{{ url('admin/gas-request') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-clipboard mx-2"></i>
+                        <span>Gas Request Management</span>
+                    </div>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/schedule-management') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Gas Schedule Management</h4>
+        <a href="{{ url('admin/schedule') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-calendar-alt mx-2"></i>
+                        <span>Gas Schedule Management</span>
+                    </div>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/outlet-management') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Gas Outlet Management</h4>
+        <a href="{{ url('admin/outlet') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-store mx-2"></i>
+                        <span>Gas Outlet Management</span>
+                    </div>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/outlet-managers') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Gas Outlet Magesrs</h4>
+        <a href="{{ url('admin/outlet-manager') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-users mx-2"></i>
+                        <span>Outlet Magesrs</span>
+                    </div>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/consumer-management') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Gas Consumer Management</h4>
+        <a href="{{ url('admin/consumer') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-user-friends mx-2"></i>
+                        <span>Consumer Management</span>
+                    </div>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/gas-management') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Gas Types Management</h4>
+        <a href="{{ url('admin/gas') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-burn mx-2"></i>
+                        <span>Gas Types Management</span>
+                    </div>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/admin-management') }}">
-            <div class="card bg-gradient-secondary cursor-pointer">
-                <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
-                <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">
-                    <h4 class="text-white">Admin Users</h4>
+        <a href="{{ url('admin/admin') }}">
+            <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
+                <div class="card-body p-3 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-users-cog mx-2"></i>
+                        <span>Admin Users</span>
+                    </div>
                 </div>
             </div>
         </a>

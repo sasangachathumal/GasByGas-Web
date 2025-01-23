@@ -36,6 +36,20 @@ class ConsumerController extends Controller
         }
     }
 
+    public function searchByNIC(Request $request)
+    {
+        $search = $request->input('search');
+        $result = consumer::join('users', 'consumers.user_id', '=', 'users.id')
+            ->select('users.email as user_email', 'consumers.*')
+            ->where('users.email', 'like', '%' . $search . '%')
+            ->first();
+        return response()->json([
+            'status' => true,
+            'message' => 'Consumer data retrieved successfully',
+            'data' => $result
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

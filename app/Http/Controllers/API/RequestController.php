@@ -94,11 +94,30 @@ class RequestController extends Controller
     {
         $request->validate([
             'schedule_id' => 'required|exists:schedules,id',
-            'gas_id' => 'required|exists:gases,id',
+            'gas_id' => 'required|exists:gas,id',
             'consumer_id' => 'required|exists:consumers,id',
             'type' => 'required|string',
             'quantity' => 'required|string',
         ]);
+
+        $allRequests = requestModel::all()->where('consumer_id', '=', $request->consumer_id);
+
+        if (count($allRequests) > 0) {
+            foreach ($allRequests as $singleRequest) {
+                if (($singleRequest->status == RequestStatusType::Pending->value) || ($singleRequest->status == RequestStatusType::Paid->value)) {
+                    $errorData = [
+                        'ACTIVE_REQ' => [
+                            'message' => 'Consumer already have active request'
+                        ]
+                    ];
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Request created failed',
+                        'errors' => $errorData
+                    ], 400);
+                }
+            }
+        }
 
         $newRequest = requestModel::create([
             'schedule_id' => $request->get('schedule_id'),
@@ -135,6 +154,59 @@ class RequestController extends Controller
     public function show($id)
     {
         $allRequests = requestModel::all()->where('id', '=', $id);
+
+        $combinedResults = $allRequests->map(function ($request) {
+            // Get gas data for the current request
+            $gasData = gas::query()
+                ->where('id', $request->gas_id)
+                ->select('*')
+                ->first();
+
+            // Get consumer data for the current request
+            $consumerData = consumer::query()
+                ->where('id', $request->consumer_id)
+                ->select('*')
+                ->first();
+
+            // Get user email data for the current request
+            $consumerEmail = User::query()
+                ->select('email')
+                ->where('id', $consumerData->user_id)
+                ->first();
+
+            $consumerData->email = $consumerEmail->email;
+
+            // Get schedule data for the current request
+            $scheduleData = schedule::query()
+                ->where('id', $request->schedule_id)
+                ->select('*')
+                ->first();
+
+            // Get outlet data for the current request
+            $outletData = outlet::query()
+                ->where('id', $scheduleData->outlet_id)
+                ->select('*')
+                ->first();
+
+            // Return the combined data for the current request
+            return [
+                'request' => $request,
+                'gas' => $gasData,
+                'consumer' => $consumerData,
+                'schedule' => $scheduleData,
+                'outlet' => $outletData
+            ];
+        });
+        return response()->json([
+            'status' => true,
+            'message' => 'Request found successfully',
+            'data' => $combinedResults->first() ?? (object)[]
+        ], 200);
+    }
+
+    public function searchByToken($token)
+    {
+        $allRequests = requestModel::all()->where('token', '=', $token);
 
         $combinedResults = $allRequests->map(function ($request) {
             // Get gas data for the current request
