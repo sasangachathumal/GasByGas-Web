@@ -15,12 +15,11 @@ return new class extends Migration
     {
         Schema::create('consumers', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('request_id')->constrained('requests')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('nic')->nullable();
-            $table->string('email');
-            $table->string('phone_no');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('nic')->unique();
+            $table->string('phone_no')->unique();
             $table->enum('type', array_column(ConsumerType::cases(), 'value'))->default(ConsumerType::Customer->value);
-            $table->string('business_no')->nullable();
+            $table->string('business_no')->nullable()->unique();
             $table->enum('status', array_column(StatusType::cases(), 'value'))->default(StatusType::Pending->value);
             $table->timestamps();
         });

@@ -18,7 +18,7 @@
                                     @csrf
                                     <label>Email</label>
                                     <div class="mb-3">
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="admin@softui.com" aria-label="Email" aria-describedby="email-addon">
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="" aria-label="Email" aria-describedby="email-addon">
                                         @error('email')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                         @enderror
@@ -44,6 +44,10 @@
                                 <small class="text-muted">Forgot you password? Reset you password
                                     <a href="/login/forgot-password" class="text-info text-gradient font-weight-bold">here</a>
                                 </small>
+                                <p class="mb-4 text-sm mx-auto">
+                                    Don't have a customer account?
+                                    <a href="register" class="text-info text-gradient font-weight-bold">Register</a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -71,9 +75,8 @@
             const password = $('#password').val();
 
             // Make an AJAX POST request
-            console.log('qwww');
             $.ajax({
-                url: '/api/v1/login', // Replace with your API endpoint
+                url: '/api/v1/login',
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': csrfToken, // CSRF token for Laravel
@@ -87,14 +90,35 @@
                 xhrFields: {
                     withCredentials: true, // Ensures cookies are sent
                 },
-                success: function(response) {
-                    console.log(response);
-                    if (response.user.type === "ADMIN") {
-                        window.location.href = "/admin/dashboard";
-                    }
-                    if (response.user.type === "OUTLET") {
-                        window.location.href = "/outlet/dashboard";
-                    }
+                success: function(loginResponse) {
+                    $.ajax({
+                        url: '/api/v1/me',
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                        contentType: 'application/json',
+                        xhrFields: {
+                            withCredentials: true,
+                        },
+                        success: function(response) {
+                            localStorage.setItem('me', JSON.stringify(response.data));
+                            if (loginResponse.user.type === "ADMIN") {
+                                window.location.href = "/admin/dashboard";
+                            }
+                            if (loginResponse.user.type === "OUTLET_MANAGER") {
+                                window.location.href = "/outlet/dashboard";
+                            }
+                            if (loginResponse.user.type === "CONSUMER") {
+                                window.location.href = "/";
+                            }
+                        },
+                        error: function(xhr) {
+                            const error = xhr.responseJSON?.message || 'An error occurred';
+                            $('#login-response').html(`<p>Error: ${error}</p>`);
+                        },
+                    });
                 },
                 error: function(xhr) {
                     const error = xhr.responseJSON?.message || 'An error occurred';

@@ -11,6 +11,8 @@ use App\Http\Controllers\API\OutletController;
 use App\Http\Controllers\API\RequestController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\OutletManagerController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +32,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('web')->group(function () {
     Route::prefix('v1')->group(function () {
         Route::post('/login', [AuthenticationController::class, 'login']);
+        Route::post('/register', [RegisterController::class, 'store']);
         Route::post('/forgot-password', [AuthenticationController::class, 'forgotPassword']);
         Route::post('/reset-password', [AuthenticationController::class, 'resetPassword']);
-        Route::post('/me', [AuthenticationController::class, 'me'])->middleware('auth:sanctum');
+        // Route::post('/me', [AuthenticationController::class, 'me'])->middleware('auth:sanctum');
         Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
 
         Route::get('/users', [UserController::class, 'index']);
+        Route::get('/me', [UserController::class, 'me']);
 
         Route::get('/admin', [AdminController::class, 'index']);
         Route::post('/admin', [AdminController::class, 'store']);
@@ -47,10 +51,13 @@ Route::middleware('web')->group(function () {
         Route::get('/schedule/count', [ScheduleController::class, 'count']);
         Route::post('/schedule', [ScheduleController::class, 'store']);
         Route::get('/schedule/{id}', [ScheduleController::class, 'show']);
+        Route::get('/schedule/outlet/{id}', [ScheduleController::class, 'getByOutletID']);
         Route::put('/schedule/{id}', [ScheduleController::class, 'update']);
         Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy']);
 
         Route::get('/consumer', [ConsumerController::class, 'index']);
+        Route::get('/consumer/count', [ConsumerController::class, 'count']);
+        Route::get('/consumer/search', [ConsumerController::class, 'searchByNIC']);
         Route::post('/consumer', [ConsumerController::class, 'store']);
         Route::get('/consumer/{id}', [ConsumerController::class, 'show']);
         Route::put('/consumer/{id}', [ConsumerController::class, 'update']);
@@ -60,6 +67,7 @@ Route::middleware('web')->group(function () {
         Route::get('/request/count', [RequestController::class, 'count']);
         Route::post('/request', [RequestController::class, 'store']);
         Route::get('/request/{id}', [RequestController::class, 'show']);
+        Route::get('/request/token/{token}', [RequestController::class, 'searchByToken']);
         Route::put('/request/status/{id}', [RequestController::class, 'updateRequestStatus']);
         Route::put('/request/consumer/status/{id}', [RequestController::class, 'updateRequestConsumerStatus']);
         Route::put('/request/consumer/{id}', [RequestController::class, 'assignRequestToNewConsumer']);
@@ -79,5 +87,11 @@ Route::middleware('web')->group(function () {
         Route::put('/outlet/{id}', [OutletController::class, 'update']);
         Route::put('/outlet/status/{id}', [OutletController::class, 'updateStatus']);
         Route::delete('/outlet/{id}', [OutletController::class, 'destroy']);
+
+        Route::get('/outletManager', [OutletManagerController::class, 'index']);
+        Route::post('/outletManager', [OutletManagerController::class, 'store']);
+        Route::get('/outletManager/{id}', [OutletManagerController::class, 'show']);
+        Route::put('/outletManager/{id}', [OutletManagerController::class, 'update']);
+        Route::delete('/outletManager/{id}', [OutletManagerController::class, 'destroy']);
     });
 });

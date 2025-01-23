@@ -18,17 +18,9 @@
                 </a>
             </li>
             <li class="nav-item pb-2">
-                <a class="nav-link me-auto {{ (Request::is('outlet/gas-request-management') ? 'active' : '') }}" href="{{ url('outlet/gas-request-management') }}">
+                <a class="nav-link me-auto {{ (Request::is('outlet/schedule') ? 'active' : '') }}" href="{{ url('outlet/schedule') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i style="font-size: 1rem;" class="fas fa-lg fa-clipboard ps-2 pe-2 text-center text-dark {{ (Request::is('outlet/gas-request-management') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Request Management</span>
-                </a>
-            </li>
-            <li class="nav-item pb-2">
-                <a class="nav-link me-auto {{ (Request::is('outlet/schedule-management') ? 'active' : '') }}" href="{{ url('outlet/schedule-management') }}">
-                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i style="font-size: 1rem;" class="fas fa-lg fa-calendar-alt ps-2 pe-2 text-center text-dark {{ (Request::is('outlet/schedule-management') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
+                        <i style="font-size: 1rem;" class="fas fa-lg fa-calendar-alt ps-2 pe-2 text-center text-dark {{ (Request::is('outlet/schedule') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
                     </div>
                     <span class="nav-link-text ms-1">Schedule Management</span>
                 </a>

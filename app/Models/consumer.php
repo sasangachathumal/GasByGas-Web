@@ -17,7 +17,7 @@ class consumer extends Model
      * @var string[]
      */
     protected $fillable = [
-        'request_id',
+        'user_id',
         'nic',
         'email',
         'phone_no',

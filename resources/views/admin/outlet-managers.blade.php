@@ -7,12 +7,12 @@
         <div class="col-12">
             <div class="card mb-4 mx-4">
                 <div class="card-header pb-0">
-                    <div class="d-flex flex-row justify-content-between">
+                <div class="d-flex flex-row justify-content-between">
                         <div>
-                            <h5 class="mb-0">All Outlets</h5>
+                            <h5 class="mb-0">All Outlet Manages</h5>
                         </div>
-                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newOutlet">
-                            +&nbsp; New Outlet
+                        <button type="button" class="btn bg-gradient-warning  btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#newManager">
+                            +&nbsp; New Outlet Manager
                         </button>
                     </div>
                 </div>
@@ -22,19 +22,19 @@
                             <thead>
                                 <tr>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Outlet ID
-                                    </th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        email
+                                        Manager ID
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        name
+                                        Name
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        address
+                                        Email
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Phone No
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Outlet Name
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Action
@@ -43,7 +43,7 @@
                             </thead>
                             <tbody id="userTableBody">
                                 <tr>
-                                    <td colspan="6">Loading Outlets ....</td>
+                                    <td colspan="6">Loading Admins ....</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -54,33 +54,34 @@
     </div>
 </div>
 
-<!-- New Outlet Create Modal-->
-<div class="modal fade" id="newOutlet" tabindex="-1" role="dialog" aria-labelledby="newOutletModalLabel" aria-hidden="true">
+<div class="modal fade" id="newManager" tabindex="-1" role="dialog" aria-labelledby="newManagerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-normal" id="newOutletModalLabel">Create New Outlet</h5>
+                <h5 class="modal-title font-weight-normal" id="newManagerModalLabel">Create New Outlet Manager</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="new-outlet-form" role="form" method="POST">
+                <form id="new-manager-form" role="form" method="POST">
                     <div class="form-group">
-                        <label for="outlet-name-input" class="form-control-label">outlet Name</label>
-                        <input class="form-control" type="text" required placeholder="ADS Stores" id="new-outlet-name-input">
+                        <label for="new-manager-outlet-select" class="form-control-label">Select the outlet</label>
+                        <select class="form-control" id="new-manager-outlet-select">
+                            <option value="-1">~ Outlet name ~</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="outlet-email-input" class="form-control-label">outlet Email</label>
-                        <input class="form-control" type="email" required placeholder="ADSStores@gamil.com" id="new-outlet-email-input">
+                        <label for="admin-name-input" class="form-control-label">Manager Name</label>
+                        <input class="form-control" type="text" required placeholder="John Snow" id="new-manager-name">
                     </div>
                     <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">outlet Phone No</label>
-                        <input class="form-control" type="text" required placeholder="+9471 2823427" id="new-outlet-phoneNo-input">
+                        <label for="admin-email-input" class="form-control-label">Manager Email</label>
+                        <input class="form-control" type="email" required placeholder="admin@admin.com" id="new-manager-email">
                     </div>
                     <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">outlet Address</label>
-                        <textarea class="form-control" id="new-outlet-address-input" required></textarea>
+                        <label for="admin-phoneNo-input" class="form-control-label">Manager Phone No</label>
+                        <input class="form-control" type="text" required placeholder="+9471 2823427" id="new-manager-phoneNo">
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
@@ -88,44 +89,47 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <div class="alert alert-danger text-white" style="display: none;" role="alert" id="newOutletErrorMessages"></div>
+                <div class="alert alert-danger text-white" style="display: none;" role="alert" id="newManagerErrorMessages"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- outlet Edit Modal-->
-<div class="modal fade show" id="editOutlet" tabindex="-1" role="dialog" aria-labelledby="editOutletModalLabel" aria-hidden="true">
+<div class="modal fade show" id="editManager" tabindex="-1" role="dialog" aria-labelledby="editManagerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title font-weight-normal" id="editOutletModalLabel">Edit Outlet</h5>
+                <h5 class="modal-title font-weight-normal" id="editManagerModalLabel">Edit Outlet Manager</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="edit-outlet-form" role="form" method="PUT">
+                <form id="edit-manager-form" role="form" method="PUT">
                     <div class="form-group">
-                        <label for="outlet-name-input" class="form-control-label">Outlet Name</label>
-                        <input class="form-control" type="text" required placeholder="John Snow" id="edit-outlet-name-input">
+                        <label for="admin-email-input" class="form-control-label">Manager Email</label>
+                        <input class="form-control" type="email" readonly placeholder="admin@admin.com" id="edit-manager-email">
                     </div>
                     <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">Outlet Phone No</label>
-                        <input class="form-control" type="text" required placeholder="+9471 2823427" id="edit-outlet-phoneNo-input">
+                        <label for="admin-email-input" class="form-control-label">Manager Outlet</label>
+                        <input class="form-control" type="text" readonly id="edit-manager-outlet">
                     </div>
                     <div class="form-group">
-                        <label for="outlet-phoneNo-input" class="form-control-label">outlet Address</label>
-                        <textarea class="form-control" id="edit-outlet-address-input" required></textarea>
+                        <label for="admin-name-input" class="form-control-label">Manager Name</label>
+                        <input class="form-control" type="text" id="edit-manager-name">
                     </div>
-                    <input type="hidden" required id="edit-outlet-id-input">
+                    <div class="form-group">
+                        <label for="admin-phoneNo-input" class="form-control-label">Manager Phone No</label>
+                        <input class="form-control" type="text" id="edit-manager-phoneNo">
+                    </div>
+                    <input type="hidden" required id="edit-manager-id">
                     <div class="text-center">
                         <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <div class="alert alert-danger text-white" style="display: none;" role="alert" id="editOutletErrorMessages"></div>
+                <div class="alert alert-danger text-white" style="display: none;" role="alert" id="editManagerErrorMessages"></div>
             </div>
         </div>
     </div>
@@ -142,7 +146,7 @@
 <script>
     $(document).ready(function() {
         $("#message-toast").toast();
-        $("#editOutlet").modal();
+        $("#editManager").modal();
         loadData();
         clearInputs();
     });
@@ -150,7 +154,7 @@
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: '/api/v1/outlet',
+            url: '/api/v1/outletManager',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -167,6 +171,46 @@
                 loadDataToTable(xhr);
             },
         });
+        $.ajax({
+            url: '/api/v1/outlet',
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true,
+            },
+            success: function(response) {
+                loadOutletSelect(response);
+            },
+            error: function(xhr) {
+                $('#message-toast').toast('show');
+                $('#message-toast').addClass("bg-danger");
+                $('#message-toast-body').html("Error!   Please try again");
+            },
+        });
+    }
+
+    function loadOutletSelect(response) {
+        if (!response || !response.data || response.data.length <= 0) {
+            $('#message-toast').toast('show');
+            $('#message-toast').addClass("bg-danger");
+            $('#message-toast-body').html("Error!   Please try again");
+            return;
+        }
+        const outletSelect = $('#all-outlets-select')
+        $.each(response.data, function(i, item) {
+            $('#all-outlets-select').append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+            $('#new-manager-outlet-select').append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
     }
 
     function loadDataToTable(response) {
@@ -174,40 +218,41 @@
         const tbody = document.querySelector('#userTableBody');
         tbody.innerHTML = '';
         if (response && response.data && response.data.length > 0) {
-            response.data.forEach(outlet => {
+            response.data.forEach(manager => {
                 tbody.innerHTML += `
                         <tr>
-                            <td class='align-middle text-center'>${outlet.id ? outlet.id : '~none~'}</td>
-                            <td class='align-middle text-center'>${outlet.email ? outlet.email : '~none~'}</td>
-                            <td class='align-middle text-center'>${outlet.name ? outlet.name : '~none~'}</td>
-                            <td class='align-middle text-center'>${outlet.address ? outlet.address : '~none~'}</td>
-                            <td class='align-middle text-center'>${outlet.phone_no ? outlet.phone_no : '~none~'}</td>
+                            <td class='align-middle text-center'>${manager.id ? manager.id : '~none~'}</td>
+                            <td class='align-middle text-center'>${manager.name ? manager.name : '~none~'}</td>
+                            <td class='align-middle text-center'>${manager.user_email ? manager.user_email : '~none~'}</td>
+                            <td class='align-middle text-center'>${manager.phone_no ? manager.phone_no : '~none~'}</td>
+                            <td class='align-middle text-center'>${manager.outlet_name ? manager.outlet_name : '~none~'}</td>
                             <td class='align-middle text-center'>
                                 <span>
-                                    <i class="cursor-pointer fas fa-pencil-alt text-secondary mx-3" onclick="viewSelectedOutlet(${outlet.id})"></i>
+                                    <i class="cursor-pointer fas fa-pencil-alt text-secondary mx-3" onclick="viewSelectedManager(${manager.id})"></i>
                                 </span>
                                 <span>
-                                    <i class="cursor-pointer fas fa-trash text-danger mx-3" onclick="deleteSelectedOutlet(${outlet.id})"></i>
+                                    <i class="cursor-pointer fas fa-trash text-danger mx-3" onclick="deleteSelectedManager(${manager.id})"></i>
                                 </span>
                             </td>
                         </tr>
                     `;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="3">No users found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3">No Managers found</td></tr>';
         }
     }
 
-    function viewSelectedOutlet(outletID, action = null) {
-        if (outletID) {
-            getSingleOutlet(outletID)
+    function viewSelectedManager(managerID) {
+        if (managerID) {
+            getSingleManager(managerID)
                 .done(function(result) {
                     if (result.data && result.data.id) {
-                        $('#edit-outlet-id-input').val(result.data.id);
-                        $('#edit-outlet-name-input').val(result.data.name);
-                        $('#edit-outlet-phoneNo-input').val(result.data.phone_no);
-                        $('#edit-outlet-address-input').val(result.data.address);
-                        $("#editOutlet").modal('toggle');
+                        $('#edit-manager-name').val(result.data.name);
+                        $('#edit-manager-email').val(result.data.user_email);
+                        $('#edit-manager-phoneNo').val(result.data.phone_no);
+                        $('#edit-manager-outlet').val(result.data.outlet_name);
+                        $('#edit-manager-id').val(result.data.id);
+                        $("#editManager").modal('toggle');
                     } else {
                         $('#message-toast').toast('show');
                         $('#message-toast').addClass("bg-danger");
@@ -226,11 +271,11 @@
         }
     }
 
-    function deleteSelectedOutlet(outletID) {
-        if (outletID) {
+    function deleteSelectedManager(managerID) {
+        if (managerID) {
             $.confirm({
                 title: 'Delete Record?',
-                content: 'Are you sure You want to delete the selected outlet?',
+                content: 'Are you sure You want to delete the selected manager?',
                 type: 'white',
                 buttons: {
                     ok: {
@@ -238,13 +283,13 @@
                         btnClass: 'btn btn-danger',
                         keys: ['enter'],
                         action: function() {
-                            deleteSingleOutlet(outletID)
+                            deleteSingleManager(managerID)
                                 .done(function(result) {
                                     $('#message-toast').toast('show');
                                     $('#message-toast').addClass("bg-success");
-                                    $('#message-toast-body').html("Success!   Outlet Delete successfull");
+                                    $('#message-toast-body').html("Success!   Nabager Delete successfull");
                                     loadData();
-                                    clearInputs();
+                                    clearInputs(false);
                                 })
                                 .fail(function() {
                                     $('#message-toast').toast('show');
@@ -265,10 +310,10 @@
         }
     }
 
-    function getSingleOutlet(id) {
+    function getSingleManager(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         return $.ajax({
-            url: '/api/v1/outlet/' + id,
+            url: '/api/v1/outletManager/' + id,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -287,10 +332,10 @@
         });
     }
 
-    function deleteSingleOutlet(id) {
+    function deleteSingleManager(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         return $.ajax({
-            url: '/api/v1/outlet/' + id,
+            url: '/api/v1/outletManager/' + id,
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -309,21 +354,21 @@
         });
     }
 
-    $('#new-outlet-form').on('submit', function(e) {
+    $('#new-manager-form').on('submit', function(e) {
         e.preventDefault();
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         // Collect form data
-        const name = $('#new-outlet-name-input').val();
-        const email = $('#new-outlet-email-input').val();
-        const phoneNo = $('#new-outlet-phoneNo-input').val();
-        const address = $('#new-outlet-address-input').val();
+        const outlet = $('#new-manager-outlet-select').val();
+        const name = $('#new-manager-name').val();
+        const email = $('#new-manager-email').val();
+        const phoneNo = $('#new-manager-phoneNo').val();
 
         // Make an AJAX POST request
         $.ajax({
-            url: '/api/v1/outlet',
+            url: '/api/v1/outletManager',
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -331,44 +376,43 @@
             },
             contentType: 'application/json',
             data: JSON.stringify({
+                outlet_id: outlet,
                 name: name,
                 email: email,
                 phone_no: phoneNo,
-                address: address
             }),
             xhrFields: {
                 withCredentials: true,
             },
             success: function(response) {
-                $('#newOutlet').modal('toggle');
+                $('#newManager').modal('toggle');
                 $('#message-toast').toast('show');
                 $('#message-toast').addClass("bg-success");
-                $('#message-toast-body').html("Success!   New Outlet Successfully Created!");
+                $('#message-toast-body').html("Success!   New Manager Successfully Created!");
                 loadData();
-                clearInputs();
+                clearInputs(true);
             },
             error: function(xhr) {
-                $('#newOutletErrorMessages').show();
-                $('#newOutletErrorMessages').html("Error!   New Outlet Creation Failed!");
+                $('#newManagerErrorMessages').show();
+                $('#newManagerErrorMessages').html("Error!   New Manager Creation Failed!");
             },
         });
     });
 
-    $('#edit-outlet-form').on('submit', function(e) {
+    $('#edit-manager-form').on('submit', function(e) {
         e.preventDefault();
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         // Collect form data
-        const id = $('#edit-outlet-id-input').val();
-        const name = $('#edit-outlet-name-input').val();
-        const phoneNo = $('#edit-outlet-phoneNo-input').val();
-        const address = $('#edit-outlet-address-input').val();
+        const name = $('#edit-manager-name').val();
+        const phoneNo = $('#edit-manager-phoneNo').val();
+        const id = $('#edit-manager-id').val();
 
         // Make an AJAX POST request
         $.ajax({
-            url: '/api/v1/outlet/' + id,
+            url: '/api/v1/outletManager/' + id,
             method: 'PUT',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -378,35 +422,35 @@
             data: JSON.stringify({
                 name: name,
                 phone_no: phoneNo,
-                address: address
             }),
             xhrFields: {
                 withCredentials: true,
             },
             success: function(response) {
-                $('#editOutlet').modal('toggle');
+                $('#editManager').modal('toggle');
                 $('#message-toast').toast('show');
                 $('#message-toast').addClass("bg-success");
-                $('#message-toast-body').html("Success!!   Outlet Update Successfull!");
+                $('#message-toast-body').html("Success!!   Manager Update Successfull!");
                 loadData();
                 clearInputs();
             },
             error: function(xhr) {
-                $('#editOutletErrorMessages').show();
-                $('#editOutletErrorMessages').html("Error!!   Outlet Update Failed!");
+                $('#editManagerErrorMessages').show();
+                $('#editManagerErrorMessages').html("Error!!   Manager Update Failed!");
             },
         });
     });
 
     function clearInputs() {
-        $('#new-outlet-name-input').val(null);
-        $('#new-outlet-email-input').val(null);
-        $('#new-outlet-phoneNo-input').val(null);
-        $('#new-outlet-address-input').val(null);
-        $('#edit-outlet-name-input').val(null);
-        $('#edit-outlet-phoneNo-input').val(null);
-        $('#edit-outlet-address-input').val(null);
-        $('#edit-outlet-id-input').val(null);
+        $('#all-outlets-select').val('-1');
+        $('#edit-manager-name').val(null);
+        $('#edit-manager-phoneNo').val(null);
+        $('#edit-manager-outlet').val(null);
+        $('#edit-manager-email').val(null);
+        $('#new-manager-outlet-select').val('-1');
+        $('#new-manager-name').val(null);
+        $('#new-manager-email').val(null);
+        $('#new-manager-phoneNo').val(null);
     }
 </script>
 

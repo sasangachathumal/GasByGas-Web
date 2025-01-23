@@ -10,6 +10,7 @@ use App\Models\consumer;
 use App\Models\gas;
 use App\Models\outlet;
 use App\Models\schedule;
+use App\Models\User;
 use App\RequestStatusType;
 use App\StatusType;
 use Illuminate\Http\Request;
@@ -33,9 +34,17 @@ class RequestController extends Controller
 
             // Get consumer data for the current request
             $consumerData = consumer::query()
-                ->where('request_id', $request->id)
+                ->where('id', $request->consumer_id)
                 ->select('*')
                 ->first();
+
+            // Get user email data for the current request
+            $consumerEmail = User::query()
+                ->select('email')
+                ->where('id', $consumerData->user_id)
+                ->first();
+
+            $consumerData->email = $consumerEmail->email;
 
             // Get schedule data for the current request
             $scheduleData = schedule::query()
@@ -85,19 +94,35 @@ class RequestController extends Controller
     {
         $request->validate([
             'schedule_id' => 'required|exists:schedules,id',
-            'gas_id' => 'required|exists:gases,id',
+            'gas_id' => 'required|exists:gas,id',
+            'consumer_id' => 'required|exists:consumers,id',
             'type' => 'required|string',
             'quantity' => 'required|string',
-            'con_email' => 'required|email|string',
-            'con_phone_no' => 'required|string',
-            'con_type' => 'required|string',
-            'con_nic' => 'nullable|string',
-            'con_business_no' => 'nullable|string',
         ]);
+
+        $allRequests = requestModel::all()->where('consumer_id', '=', $request->consumer_id);
+
+        if (count($allRequests) > 0) {
+            foreach ($allRequests as $singleRequest) {
+                if (($singleRequest->status == RequestStatusType::Pending->value) || ($singleRequest->status == RequestStatusType::Paid->value)) {
+                    $errorData = [
+                        'ACTIVE_REQ' => [
+                            'message' => 'Consumer already have active request'
+                        ]
+                    ];
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Request created failed',
+                        'errors' => $errorData
+                    ], 400);
+                }
+            }
+        }
 
         $newRequest = requestModel::create([
             'schedule_id' => $request->get('schedule_id'),
             'gas_id' => $request->get('gas_id'),
+            'consumer_id' => $request->get('consumer_id'),
             'type' => $request->get('type'),
             'quantity' => $request->get('quantity'),
             'status' => RequestStatusType::Pending->value,
@@ -106,40 +131,21 @@ class RequestController extends Controller
         ]);
 
         if ($newRequest) {
-            $newConsumer = consumer::create([
-                'request_id' => $newRequest->id,
-                'nic' => $request->get('con_nic'),
-                'email' => $request->get('con_email'),
-                'phone_no' => $request->get('con_phone_no'),
-                'type' => $request->get('con_type'),
-                'business_no' => $request->get('con_business_no'),
-                'status' => StatusType::Approved->value,
+            $schedule = schedule::findOrFail($newRequest->schedule_id);
+            $schedule->update([
+                'available_quantity' => ($schedule->available_quantity - $newRequest->quantity)
             ]);
-            if ($newConsumer) {
-                $newResponse = (object)array_merge((array)$newRequest, (array)$newConsumer);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Request created successfully',
-                    'data' => $newResponse
-                ], 201);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Request created failed',
-                ], 400);
-            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Request created successfully',
+                'data' => $newRequest
+            ], 201);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'Request created failed',
             ], 400);
         }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Request created successfully',
-            'data' => $requestModel
-        ], 201);
     }
 
     /**
@@ -158,9 +164,70 @@ class RequestController extends Controller
 
             // Get consumer data for the current request
             $consumerData = consumer::query()
-                ->where('request_id', $request->id)
+                ->where('id', $request->consumer_id)
                 ->select('*')
                 ->first();
+
+            // Get user email data for the current request
+            $consumerEmail = User::query()
+                ->select('email')
+                ->where('id', $consumerData->user_id)
+                ->first();
+
+            $consumerData->email = $consumerEmail->email;
+
+            // Get schedule data for the current request
+            $scheduleData = schedule::query()
+                ->where('id', $request->schedule_id)
+                ->select('*')
+                ->first();
+
+            // Get outlet data for the current request
+            $outletData = outlet::query()
+                ->where('id', $scheduleData->outlet_id)
+                ->select('*')
+                ->first();
+
+            // Return the combined data for the current request
+            return [
+                'request' => $request,
+                'gas' => $gasData,
+                'consumer' => $consumerData,
+                'schedule' => $scheduleData,
+                'outlet' => $outletData
+            ];
+        });
+        return response()->json([
+            'status' => true,
+            'message' => 'Request found successfully',
+            'data' => $combinedResults->first() ?? (object)[]
+        ], 200);
+    }
+
+    public function searchByToken($token)
+    {
+        $allRequests = requestModel::all()->where('token', '=', $token);
+
+        $combinedResults = $allRequests->map(function ($request) {
+            // Get gas data for the current request
+            $gasData = gas::query()
+                ->where('id', $request->gas_id)
+                ->select('*')
+                ->first();
+
+            // Get consumer data for the current request
+            $consumerData = consumer::query()
+                ->where('id', $request->consumer_id)
+                ->select('*')
+                ->first();
+
+            // Get user email data for the current request
+            $consumerEmail = User::query()
+                ->select('email')
+                ->where('id', $consumerData->user_id)
+                ->first();
+
+            $consumerData->email = $consumerEmail->email;
 
             // Get schedule data for the current request
             $scheduleData = schedule::query()
@@ -207,44 +274,18 @@ class RequestController extends Controller
         ], 201);
     }
 
-    public function updateRequestConsumerStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|string',
-        ]);
-
-        $consumer = Consumer::where('request_id', $id)->firstOrFail();
-        $consumer->update(['status' => $request->get('status')]);
-        return response()->json([
-            'status' => true,
-            'message' => 'Request consumer status updated successfully'
-        ], 201);
-    }
-
     public function assignRequestToNewConsumer(Request $request, $id)
     {
         $request->validate([
-            'email' => 'nullable|email|string',
-            'phone_no' => 'nullable|string',
-            'type' => 'nullable|string',
-            'status' => 'nullable|string',
-            'nic' => 'nullable|string',
-            'business_no' => 'nullable|string',
+            'consumer_id' => 'required'
         ]);
 
-        $consumer = Consumer::where('request_id', $id)->firstOrFail();
-        $consumer->update([
-            'status' => $request->get('status'),
-            'email' => $request->get('email'),
-            'phone_no' => $request->get('phone_no'),
-            'type' => $request->get('type'),
-            'nic' => $request->get('nic'),
-            'business_no' => $request->get('business_no')
-        ]);
+        $requestModel = requestModel::where('request_id', $id)->firstOrFail();
+        $requestModel->update(['consumer_id' => $request->get('consumer_id')]);
         return response()->json([
             'status' => true,
             'message' => 'Request assign to a consumer successfully',
-            'data' => $consumer
+            'data' => $requestModel
         ], 201);
     }
 

@@ -176,7 +176,7 @@
                                     <i class="cursor-pointer fas fa-pencil-alt text-secondary mx-3" onclick="viewSelectedAdmin(${admin.id})"></i>
                                 </span>
                                 <span>
-                                    <i class="cursor-pointer fas fa-trash text-danger mx-3" onclick="deleteSelectedAdmin(${admin.user_id})"></i>
+                                    <i class="cursor-pointer fas fa-trash text-danger mx-3" onclick="deleteSelectedAdmin(${admin.id})"></i>
                                 </span>
                             </td>
                         </tr>

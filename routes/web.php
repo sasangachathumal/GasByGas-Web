@@ -29,15 +29,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('dashboard', function () {return view('admin/admin-dashboard');})->name('dashboard');
 
-        Route::get('admin-management', function () {return view('admin/admin-management');})->name('admin-management');
+        Route::get('admin', function () {return view('admin/admin-management');})->name('admin');
 
-        Route::get('outlet-management', function () {return view('admin/outlet-management');})->name('outlet-management');
+        Route::get('outlet', function () {return view('admin/outlet-management');})->name('outlet');
 
-        Route::get('schedule-management', function () {return view('admin/schedule-management');})->name('schedule-management');
+        Route::get('schedule', function () {return view('admin/schedule-management');})->name('schedule');
 
-        Route::get('gas-management', function () {return view('admin/gas-management');})->name('gas-management');
+        Route::get('gas', function () {return view('admin/gas-management');})->name('gas');
 
-        Route::get('gas-request-management', function () {return view('admin/gas-request-management');})->name('gas-request-management');
+        Route::get('gas-request', function () {return view('admin/gas-request-management');})->name('gas-request');
+
+        Route::get('consumer', function () {return view('admin/consumer-management');})->name('consumer');
+
+        Route::get('outlet-manager', function () {return view('admin/outlet-managers');})->name('outlet-manager');
 
         Route::get('/login', function () {return view('admin/admin-dashboard');});
     });
@@ -45,9 +49,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('outlet')->group(function () {
         Route::get('dashboard', function () {return view('outlet/outlet-dashboard');})->name('dashboard');
 
-        Route::get('schedule-management', function () {return view('outlet/schedule-management');})->name('schedule-management');
+        Route::get('schedule', function () {return view('outlet/schedule-management');})->name('schedule');
 
-        Route::get('gas-request-management', function () {return view('outlet/gas-request-management');})->name('gas-request-management');
+        Route::get('gas-request', function () {return view('outlet/gas-request-management');})->name('gas-request');
 
         Route::get('/login', function () {return view('outlet/outlet-dashboard');});
     });
@@ -56,6 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'guest'], function () {
+    Route::get('/register', [RegisterController::class, 'create']);
     Route::get('/login', [SessionsController::class, 'create']);
     Route::get('/login', function () {return view('session/login-session');});
 	Route::get('/login/forgot-password', [ResetController::class, 'create']);

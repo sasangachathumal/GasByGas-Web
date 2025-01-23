@@ -7,7 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\admin;
+use App\Models\consumer;
 use App\Models\outlet;
+use App\Models\outlet_manager;
+use App\UserType;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -55,7 +59,7 @@ class UserController extends Controller
             ], 200);
         }
 
-        if ($usertype && $usertype == 'outlet') {
+        if ($usertype && $usertype == 'outlet_manager') {
             $outletQuery = Outlet::join('users', 'outlets.user_id', '=', 'users.id')
                 ->select('users.id', 'users.type', 'outlets.email', 'outlets.name', 'outlets.phone_no', 'outlets.address', 'outlets.status');
             if ($outletStatus) {
@@ -67,6 +71,48 @@ class UserController extends Controller
                 'message' => 'All users retrieved successfully',
                 'data' => $outletOnlyData
             ], 200);
+        }
+    }
+
+    public function me()
+    {
+        $user = Auth::user();
+        if ($user && $user->type === UserType::Admin->value) {
+            $adminQuery = Admin::join('users', 'admins.user_id', '=', 'users.id')
+                ->select('users.id as user_id', 'users.type as user_type', 'admins.*')
+                ->where('admins.user_id', '=', $user->id)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'user retrieved successfully',
+                'data' => $adminQuery->first() ?? (object)[]
+            ], 200);
+        } else if ($user && $user->type === UserType::Outlet_Manager->value) {
+            $outletManagerQuery = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
+                ->select('users.id as user_id', 'users.type as user_type', 'outlet_managers.*')
+                ->where('outlet_managers.user_id', '=', $user->id)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'user retrieved successfully',
+                'data' => $outletManagerQuery->first() ?? (object)[]
+            ], 200);
+        } else if ($user && $user->type === UserType::Consumer->value) {
+            $consumerQuery = consumer::join('users', 'consumers.user_id', '=', 'users.id')
+                ->select('users.id as user_id', 'users.type as user_type', 'consumers.*')
+                ->where('consumers.user_id', '=', $user->id)
+                ->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'consumer retrieved successfully',
+                'data' => $consumerQuery->first() ?? (object)[]
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User Not Found',
+                'data' => $user
+            ], 400);
         }
     }
 
