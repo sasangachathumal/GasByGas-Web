@@ -20,7 +20,7 @@ class ConsumerController extends Controller
     public function index()
     {
         $consumerQuery = consumer::join('users', 'consumers.user_id', '=', 'users.id')
-            ->select('users.id as user_id', 'users.type as user_type', 'consumers.*')
+            ->select('users.email as user_email', 'consumers.*')
             ->get();
         if ($consumerQuery) {
             return response()->json([
@@ -89,7 +89,7 @@ class ConsumerController extends Controller
     public function show($id)
     {
         $consumerQuery = consumer::join('users', 'consumers.user_id', '=', 'users.id')
-            ->select('users.id as user_id', 'users.type as user_type', 'consumers.*')
+            ->select('users.email as user_email', 'consumers.*')
             ->where('consumers.id', '=', $id)
             ->get();
         if ($consumerQuery) {

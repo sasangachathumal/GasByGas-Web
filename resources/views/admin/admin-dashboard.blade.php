@@ -120,7 +120,7 @@
         </a>
     </div>
     <div class="col-3 col-md-3 mb-4">
-        <a href="{{ url('admin/outlet-managers-management') }}">
+        <a href="{{ url('admin/outlet-managers') }}">
             <div class="card bg-gradient-secondary cursor-pointer">
                 <img class="card-img h-50" src="../assets/img/shapes/waves-white.svg" alt="Card image">
                 <div class="card-img-overlay p-3 d-flex align-items-center justify-content-center">

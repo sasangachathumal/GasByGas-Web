@@ -11,6 +11,7 @@ use App\Http\Controllers\API\OutletController;
 use App\Http\Controllers\API\RequestController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\OutletManagerController;
 use App\Http\Controllers\RegisterController;
 
 /*
@@ -84,5 +85,11 @@ Route::middleware('web')->group(function () {
         Route::put('/outlet/{id}', [OutletController::class, 'update']);
         Route::put('/outlet/status/{id}', [OutletController::class, 'updateStatus']);
         Route::delete('/outlet/{id}', [OutletController::class, 'destroy']);
+
+        Route::get('/outletManager', [OutletManagerController::class, 'index']);
+        Route::post('/outletManager', [OutletManagerController::class, 'store']);
+        Route::get('/outletManager/{id}', [OutletManagerController::class, 'show']);
+        Route::put('/outletManager/{id}', [OutletManagerController::class, 'update']);
+        Route::delete('/outletManager/{id}', [OutletManagerController::class, 'destroy']);
     });
 });

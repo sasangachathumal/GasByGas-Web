@@ -34,11 +34,11 @@
                 </a>
             </li>
             <li class="nav-item pb-2">
-                <a class="nav-link me-auto {{ (Request::is('admin/admin-management') ? 'active' : '') }}" href="{{ url('admin/admin-management') }}">
+                <a class="nav-link me-auto {{ (Request::is('admin/consumer-management') ? 'active' : '') }}" href="{{ url('admin/consumer-management') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i style="font-size: 1rem;" class="fas fa-lg fa-users ps-2 pe-2 text-center text-dark {{ (Request::is('admin/admin-management') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
+                        <i style="font-size: 1rem;" class="fas fa-lg fa-users ps-2 pe-2 text-center text-dark {{ (Request::is('admin/consumer-management') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Admin Management</span>
+                    <span class="nav-link-text ms-1">Consumer Management</span>
                 </a>
             </li>
             <li class="nav-item pb-2">
@@ -47,6 +47,22 @@
                         <i style="font-size: 1rem;" class="fas fa-lg fa-store ps-2 pe-2 text-center text-dark {{ (Request::is('admin/outlet-management') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
                     </div>
                     <span class="nav-link-text ms-1">Outlet Management</span>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+                <a class="nav-link me-auto {{ (Request::is('admin/outlet-managers') ? 'active' : '') }}" href="{{ url('admin/outlet-managers') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i style="font-size: 1rem;" class="fas fa-lg fa-users ps-2 pe-2 text-center text-dark {{ (Request::is('admin/outlet-managers') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Outlet Managers</span>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+                <a class="nav-link me-auto {{ (Request::is('admin/admin-management') ? 'active' : '') }}" href="{{ url('admin/admin-management') }}">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i style="font-size: 1rem;" class="fas fa-lg fa-users ps-2 pe-2 text-center text-dark {{ (Request::is('admin/admin-management') ? 'text-white' : 'text-dark') }} " aria-hidden="true"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Admin Management</span>
                 </a>
             </li>
             <li class="nav-item pb-2">

@@ -39,6 +39,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('gas-request-management', function () {return view('admin/gas-request-management');})->name('gas-request-management');
 
+        Route::get('consumer-management', function () {return view('admin/consumer-management');})->name('consumer-management');
+
+        Route::get('outlet-managers', function () {return view('admin/outlet-managers');})->name('outlet-managers');
+
         Route::get('/login', function () {return view('admin/admin-dashboard');});
     });
 

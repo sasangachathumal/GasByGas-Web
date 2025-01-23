@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\outlet_manager;
 use Illuminate\Http\Request;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class OutletManagerController extends Controller
 {
@@ -20,14 +23,17 @@ class OutletManagerController extends Controller
      */
     public function index()
     {
-        $outletManageruery = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
-            ->select('users.id as user_id', 'users.type as user_type', 'outlet_managers.*')
+        $outletManagers = outlet_manager::query()
+            ->join('users', 'outlet_managers.user_id', '=', 'users.id')
+            ->join('outlets', 'outlets.id', '=', 'outlet_managers.outlet_id')
+            ->select('outlet_managers.*', 'users.email as user_email', 'outlets.name as outlet_name')
             ->get();
-        if ($outletManageruery) {
+
+        if ($outletManagers) {
             return response()->json([
                 'status' => true,
                 'message' => 'outlet manager retrieved successfully',
-                'data' => $outletManageruery
+                'data' => $outletManagers
             ], 200);
         } else {
             return response()->json([
@@ -86,10 +92,13 @@ class OutletManagerController extends Controller
      */
     public function show($id)
     {
-        $outletManagerQuery = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
-            ->select('users.id as user_id', 'users.type as user_type', 'outlet_managers.*')
+        $outletManagerQuery = outlet_manager::query()
+            ->join('users', 'outlet_managers.user_id', '=', 'users.id')
+            ->join('outlets', 'outlets.id', '=', 'outlet_managers.outlet_id')
+            ->select('outlet_managers.*', 'users.email as user_email', 'outlets.name as outlet_name')
             ->where('outlet_managers.id', '=', $id)
             ->get();
+
         if ($outletManagerQuery) {
             return response()->json([
                 'status' => true,
