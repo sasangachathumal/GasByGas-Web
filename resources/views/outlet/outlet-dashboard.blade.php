@@ -678,7 +678,7 @@
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: '/api/v1/request',
+            url: '/api/v1/request/user',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,

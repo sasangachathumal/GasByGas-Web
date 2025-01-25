@@ -111,7 +111,7 @@
                                 window.location.href = "/outlet/dashboard";
                             }
                             if (loginResponse.user.type === "CONSUMER") {
-                                window.location.href = "/";
+                                window.location.href = "/consumer/dashboard";
                             }
                         },
                         error: function(xhr) {

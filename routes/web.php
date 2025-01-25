@@ -54,6 +54,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/login', function () {return view('outlet/outlet-dashboard');});
     });
 
+    Route::prefix('consumer')->group(function () {
+        Route::get('dashboard', function () {return view('consumer/consumer-dashboard');})->name('dashboard');
+
+        Route::get('/login', function () {return view('consumer/consumer-dashboard');});
+    });
+
     Route::get('/logout', [SessionsController::class, 'destroy']);
 });
 

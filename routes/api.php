@@ -64,6 +64,7 @@ Route::middleware('web')->group(function () {
         Route::delete('/consumer/{id}', [ConsumerController::class, 'destroy']);
 
         Route::get('/request', [RequestController::class, 'index']);
+        Route::get('/request/user', [RequestController::class, 'getAllByLoginUser']);
         Route::get('/request/count', [RequestController::class, 'count']);
         Route::post('/request', [RequestController::class, 'store']);
         Route::get('/request/{id}', [RequestController::class, 'show']);
