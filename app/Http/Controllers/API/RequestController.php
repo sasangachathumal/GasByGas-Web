@@ -9,13 +9,17 @@ use App\Models\requestModel;
 use App\Models\consumer;
 use App\Models\gas;
 use App\Models\outlet;
+use App\Models\outlet_manager;
 use App\Models\schedule;
 use App\Models\User;
 use App\RequestStatusType;
 use App\StatusType;
+use App\UserType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class RequestController extends Controller
 {
@@ -74,6 +78,147 @@ class RequestController extends Controller
             'message' => 'Requests retrieved successfully',
             'data' => $combinedResults
         ], 200);
+    }
+
+    public function getAllByLoginUser()
+    {
+        $user = Auth::user();
+        $combinedResults = null;
+        if ($user && $user->type === UserType::Outlet_Manager->value) {
+            $combinedResults = $this->outletManagerRequests($user->id);
+        } else if ($user && $user->type === UserType::Consumer->value) {
+            $combinedResults = $this->consumerRequests($user->id);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Requests retrieved successfully',
+            'data' => $combinedResults
+        ], 200);
+    }
+
+    public function outletManagerRequests($userId)
+    {
+        $allOutletRequests = array();
+        $outletId = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
+            ->select('outlet_managers.outlet_id')
+            ->where('outlet_managers.user_id', '=', $userId)
+            ->first();
+        if ($outletId->outlet_id) {
+            $outletSchedules = schedule::query()
+                ->where('outlet_id', '=', $outletId->outlet_id)
+                ->get();
+            if (count($outletSchedules) > 0) {
+                foreach ($outletSchedules as $schedule) {
+                    $scheduleRequest = requestModel::query()
+                        ->where('schedule_id', '=', $schedule->id)
+                        ->get();
+                    if (count($scheduleRequest) > 0) {
+                        foreach ($scheduleRequest as $request) {
+                            // Get gas data for the current request
+                            $gasData = gas::query()
+                                ->where('id', $request->gas_id)
+                                ->select('*')
+                                ->first();
+
+                            // Get consumer data for the current request
+                            $consumerData = consumer::query()
+                                ->where('id', $request->consumer_id)
+                                ->select('*')
+                                ->first();
+
+                            // Get user email data for the current request
+                            $consumerEmail = User::query()
+                                ->select('email')
+                                ->where('id', $consumerData->user_id)
+                                ->first();
+
+                            $consumerData->email = $consumerEmail->email;
+
+                            // Get schedule data for the current request
+                            $scheduleData = schedule::query()
+                                ->where('id', $request->schedule_id)
+                                ->select('*')
+                                ->first();
+
+                            // Get outlet data for the current request
+                            $outletData = outlet::query()
+                                ->where('id', $scheduleData->outlet_id)
+                                ->select('*')
+                                ->first();
+
+                            // Return the combined data for the current request
+                            array_push($allOutletRequests, [
+                                'request' => $request,
+                                'gas' => $gasData,
+                                'consumer' => $consumerData,
+                                'schedule' => $scheduleData,
+                                'outlet' => $outletData
+                            ]);
+                        }
+                    }
+                }
+                return $allOutletRequests;
+            }
+        }
+    }
+
+    public function consumerRequests($userId)
+    {
+        $consumerId = consumer::join('users', 'consumers.user_id', '=', 'users.id')
+            ->select('consumers.id')
+            ->where('consumers.user_id', '=', $userId)
+            ->first();
+        if ($consumerId) {
+            $consumerRequest = requestModel::query()
+                ->where('consumer_id', '=', $consumerId->id)
+                ->get();
+            if (count($consumerRequest) > 0) {
+                $combinedResults = $consumerRequest->map(function ($request) {
+                    // Get gas data for the current request
+                    $gasData = gas::query()
+                        ->where('id', $request->gas_id)
+                        ->select('*')
+                        ->first();
+
+                    // Get consumer data for the current request
+                    $consumerData = consumer::query()
+                        ->where('id', $request->consumer_id)
+                        ->select('*')
+                        ->first();
+
+                    // Get user email data for the current request
+                    $consumerEmail = User::query()
+                        ->select('email')
+                        ->where('id', $consumerData->user_id)
+                        ->first();
+
+                    $consumerData->email = $consumerEmail->email;
+
+                    // Get schedule data for the current request
+                    $scheduleData = schedule::query()
+                        ->where('id', $request->schedule_id)
+                        ->select('*')
+                        ->first();
+
+                    // Get outlet data for the current request
+                    $outletData = outlet::query()
+                        ->where('id', $scheduleData->outlet_id)
+                        ->select('*')
+                        ->first();
+
+                    // Return the combined data for the current request
+                    return [
+                        'request' => $request,
+                        'gas' => $gasData,
+                        'consumer' => $consumerData,
+                        'schedule' => $scheduleData,
+                        'outlet' => $outletData
+                    ];
+                });
+                return $combinedResults;
+            }
+        }
     }
 
     public function count()
