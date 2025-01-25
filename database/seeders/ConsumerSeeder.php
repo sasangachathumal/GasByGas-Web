@@ -37,5 +37,16 @@ class ConsumerSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        DB::table('consumers')->insert([
+            'user_id' => 6,
+            'nic' => '925674591V',
+            'phone_no' => '+094090453447',
+            'type' => ConsumerType::Customer->value,
+            'business_no' => null,
+            'status' => StatusType::Approved->value,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }

@@ -3,32 +3,6 @@
 @section('content')
 
 <div>
-    <div class="row mx-4 mt-4 mb-6">
-        <div class="col-3 col-md-3 mb-4">
-            <a href="{{ url('outlet/schedule') }}">
-                <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
-                    <div class="card-body p-3 d-flex align-items-center justify-content-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <i class="fas fa-th-list mx-2"></i>
-                            <span>View Gas Schedule</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-3 col-md-3 mb-4">
-            <a href="{{ url('admin/outlet-manager') }}">
-                <div class="card bg-gradient-secondary text-white text-bolder cursor-pointer">
-                    <div class="card-body p-3 d-flex align-items-center justify-content-center">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <i class="fas fa-users-cog mx-2"></i>
-                            <span>Gas Outlet Magesrs</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
     <div class="row mx-4 mb-4">
         <div class="col-3">
             <div class="card mx-2 mb-4 bg-gradient-warning text-white text-bolder cursor-pointer"
@@ -53,7 +27,8 @@
             </div>
         </div>
         <div class="col-3">
-            <div class="card mx-2 mb-4 bg-gradient-success text-white text-bolder cursor-pointer">
+            <div class="card mx-2 mb-4 bg-gradient-success text-white text-bolder cursor-pointer"
+                data-bs-toggle="modal" data-bs-target="#request-pickup-mark">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-center">
                         <i class="fas fa-check-double mx-2"></i>
@@ -63,14 +38,27 @@
             </div>
         </div>
         <div class="col-3">
-            <div class="card mx-2 mb-4 bg-gradient-danger text-white text-bolder cursor-pointer">
+            <div class="card mx-2 mb-4 bg-gradient-danger text-white text-bolder cursor-pointer"
+                data-bs-toggle="modal" data-bs-target="#consumer-re-assign">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-center">
                         <i class="fas fa-user-plus mx-2"></i>
-                        <span>Reassign Consumer</span>
+                        <span>Re-assign Consumer</span>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-3">
+            <a href="{{ url('outlet/schedule') }}">
+                <div class="card mx-2 mb-4 bg-gradient-secondary text-white text-bolder cursor-pointer">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-th-list mx-2"></i>
+                            <span>View Gas Schedule</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
     <div class="row">
@@ -180,7 +168,7 @@
                             <label for="consumer-search-input" class="form-control-label">Search by consumer email</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="typeahead form-control" id="consumer-search-input" placeholder="user@user.com">
-                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchConsumerByNIC()">
+                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchConsumerByEmail('new')">
                                     <i class="fas fa-search"></i> Search
                                 </button>
                             </div>
@@ -246,13 +234,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="new-request-form" role="form" method="POST">
+                <form id="mark-payment-form" role="form" method="POST">
                     <div class="row">
                         <div class="col-6">
                             <label for="mark-payment-search-token" class="form-control-label">Search by request token</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="typeahead form-control" id="mark-payment-search-token" placeholder="Enter Token">
-                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchRequestByToken()">
+                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchRequestByToken('payment')">
                                     <i class="fas fa-search"></i> Search
                                 </button>
                             </div>
@@ -264,6 +252,10 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-payment-request-status" class="form-control-label">Request Current Status</label>
+                                <input class="form-control" type="text" readonly id="mark-payment-request-status">
+                            </div>
                             <div class="form-group">
                                 <label for="mark-payment-consumer-type" class="form-control-label">Cunsumer Type</label>
                                 <input class="form-control" type="text" readonly id="mark-payment-consumer-type">
@@ -359,6 +351,228 @@
             </div>
             <div class="modal-footer">
                 <div class="alert alert-danger text-white w-100" style="display: none;" role="alert" id="requestPaymentMarkErrorMessages"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="request-pickup-mark" tabindex="-1" role="dialog" aria-labelledby="requestPickupMarktModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="requestPickupMarktModalLabel">Mark Gas Pickups</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="mark-pickup-form" role="form" method="POST">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="mark-pickup-search-token" class="form-control-label">Search by request token</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="typeahead form-control" id="mark-pickup-search-token" placeholder="Enter Token">
+                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchRequestByToken('pickup')">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                            <input type="hidden" id="mark-pickup-request-search-id" required>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-danger mt-4" id="mark-pickup-request-search-error"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-request-status" class="form-control-label">Request Current Status</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-request-status">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-consumer-type" class="form-control-label">Cunsumer Type</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-consumer-type">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-consumer-email" class="form-control-label">Cunsumer Email</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-consumer-email">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-consumer-nic" class="form-control-label">Cunsumer NIC</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-consumer-nic">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-consumer-phoneNo" class="form-control-label">Cunsumer Phone No</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-consumer-phoneNo">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-consumer-businessNo" class="form-control-label">Cunsumer Business No</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-consumer-businessNo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-outlet-name" class="form-control-label">Outlet Name</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-outlet-name">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-schedule-data" class="form-control-label">Schedule Date</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-schedule-date">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-schedule-status" class="form-control-label">Schedule Status</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-schedule-status">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-gas-type" class="form-control-label">Gas Type</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-gas-type">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-gas-quantity" class="form-control-label">Quantity</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-gas-quantity">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="mark-pickup-total-price" class="form-control-label">Total Price</label>
+                                <input class="form-control" type="text" readonly id="mark-pickup-total-price">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-check form-check-info text-left">
+                                <input class="form-check-input" type="checkbox" required id="mark-pickup-done">
+                                <label class="form-check-label" for="mark-pickup-done">
+                                    Gas cylinders pickuped by customer.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" id="mark-pickup-submit-button" class="btn bg-gradient-warning w-100 mt-4 mb-0">Mark Pickup</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="alert alert-danger text-white w-100" style="display: none;" role="alert" id="requestPickupMarkErrorMessages"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consumer-re-assign" tabindex="-1" role="dialog" aria-labelledby="requestPickupMarktModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-normal" id="requestPickupMarktModalLabel">Re-Assign Request to New Consumer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="re-assign-form" role="form" method="POST">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="re-assign-search-token" class="form-control-label">Search by request token</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="typeahead form-control" id="re-assign-search-token" placeholder="Enter Token">
+                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchRequestByToken('reAssign')">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                            <input type="hidden" id="re-assign-request-search-id" required>
+                            <div class="form-group">
+                                <label for="re-assign-request-status" class="form-control-label">Request Current Status</label>
+                                <input class="form-control" type="text" readonly id="re-assign-request-status">
+                            </div>
+                            <h4>Current Consumer Details</h4>
+                            <div class="form-group">
+                                <label for="re-assign-old-consumer-type" class="form-control-label">Cunsumer Type</label>
+                                <input class="form-control" type="text" readonly id="re-assign-old-consumer-type">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-old-consumer-email" class="form-control-label">Cunsumer Email</label>
+                                <input class="form-control" type="text" readonly id="re-assign-old-consumer-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-old-consumer-nic" class="form-control-label">Cunsumer NIC</label>
+                                <input class="form-control" type="text" readonly id="re-assign-old-consumer-nic">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-old-consumer-phoneNo" class="form-control-label">Cunsumer Phone No</label>
+                                <input class="form-control" type="text" readonly id="re-assign-old-consumer-phoneNo">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-old-consumer-businessNo" class="form-control-label">Cunsumer Business No</label>
+                                <input class="form-control" type="text" readonly id="re-assign-old-consumer-businessNo">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label for="re-assign-search-email" class="form-control-label">Search consumer by email</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="typeahead form-control" id="re-assign-search-email" placeholder="Enter email">
+                                <button class="btn btn-outline-warning mb-0 btn-icon btn-2" type="button" onclick="searchConsumerByEmail('reAssign')">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                            <input type="hidden" id="re-assign-new-consumer-id" required>
+                            <div class="form-group">
+                                <label for="re-assign-request-quantity" class="form-control-label">Request Current Quantity</label>
+                                <input class="form-control" type="text" readonly id="re-assign-request-quantity">
+                            </div>
+                            <h4>New Consumer Details</h4>
+                            <div class="form-group">
+                                <label for="re-assign-new-consumer-type" class="form-control-label">Cunsumer Type</label>
+                                <input class="form-control" type="text" readonly id="re-assign-new-consumer-type">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-new-consumer-email" class="form-control-label">Cunsumer Email</label>
+                                <input class="form-control" type="text" readonly id="re-assign-new-consumer-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-new-consumer-nic" class="form-control-label">Cunsumer NIC</label>
+                                <input class="form-control" type="text" readonly id="re-assign-new-consumer-nic">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-new-consumer-phoneNo" class="form-control-label">Cunsumer Phone No</label>
+                                <input class="form-control" type="text" readonly id="re-assign-new-consumer-phoneNo">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-assign-new-consumer-businessNo" class="form-control-label">Cunsumer Business No</label>
+                                <input class="form-control" type="text" readonly id="re-assign-new-consumer-businessNo">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-danger mt-4" id="re-assign-request-search-error"></p>
+                    <div class="text-center">
+                        <button type="submit" id="re-assign-submit-button" class="btn bg-gradient-warning w-100 mt-4 mb-0">Assign New Consumer</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="alert alert-danger text-white w-100" style="display: none;" role="alert" id="requestReAssignErrorMessages"></div>
             </div>
         </div>
     </div>
@@ -506,10 +720,16 @@
         }
     }
 
-    function searchConsumerByNIC() {
+    function searchConsumerByEmail(action) {
         $('#newRequestErrorMessages').hide();
-        const search = $('#consumer-search-input').val();
+        let search = null;
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        if (action === 'reAssign') {
+            search = $('#re-assign-search-email').val();
+        }
+        if (action === 'new') {
+            search = $('#consumer-search-input').val();
+        }
         return $.ajax({
             url: '/api/v1/consumer/search?search=' + search,
             method: 'GET',
@@ -523,21 +743,43 @@
             },
             success: function(response) {
                 if (response.data) {
-                    $('#new-request-consumer-id').val(response.data.id);
-                    $('#new-request-consumer-email').val(response.data.user_email ? response.data.user_email : '~ none ~');
-                    $('#new-request-consumer-nic').val(response.data.nic ? response.data.nic : '~ none ~');
-                    $('#new-request-consumer-phoneNo').val(response.data.phone_no ? response.data.phone_no : '~ none ~');
-                    $('#new-request-consumer-businessNo').val(response.data.business_no ? response.data.business_no : '~ none ~');
-                    $('#new-request-consumer-type').val(response.data.type ? response.data.type : '~ none ~');
-                    $('#new-request-gas-quantity').val('1');
+                    if (action === 'new') {
+                        $('#new-request-consumer-id').val(response.data.id);
+                        $('#new-request-consumer-email').val(response.data.user_email ? response.data.user_email : '~ none ~');
+                        $('#new-request-consumer-nic').val(response.data.nic ? response.data.nic : '~ none ~');
+                        $('#new-request-consumer-phoneNo').val(response.data.phone_no ? response.data.phone_no : '~ none ~');
+                        $('#new-request-consumer-businessNo').val(response.data.business_no ? response.data.business_no : '~ none ~');
+                        $('#new-request-consumer-type').val(response.data.type ? response.data.type : '~ none ~');
+                        $('#new-request-gas-quantity').val('1');
+                    }
+                    if (action === 'reAssign') {
+                        $('#re-assign-new-consumer-type').val(response.data.type ? response.data.type : '~ none ~');
+                        $('#re-assign-new-consumer-email').val(response.data.user_email ? response.data.user_email : '~ none ~');
+                        $('#re-assign-new-consumer-nic').val(response.data.nic ? response.data.nic : '~ none ~');
+                        $('#re-assign-new-consumer-phoneNo').val(response.data.phone_no ? response.data.phone_no : '~ none ~');
+                        $('#re-assign-new-consumer-businessNo').val(response.data.business_no ? response.data.business_no : '~ none ~');
+                        $('#re-assign-new-consumer-id').val(response.data.id);
+                    }
                 } else {
-                    $('#newRequestErrorMessages').show();
-                    $('#newRequestErrorMessages').html("Error!   Outlet Not Found!");
+                    if (action === 'new') {
+                        $('#newRequestErrorMessages').show();
+                        $('#newRequestErrorMessages').html("Error!   Consumer Not Found!");
+                    }
+                    if (action === 'reAssign') {
+                        $('#requestReAssignErrorMessages').show();
+                        $('#requestReAssignErrorMessages').html("Error!   Consumer Not Found!");
+                    }
                 }
             },
             error: function(xhr) {
-                $('#newRequestErrorMessages').show();
-                $('#newRequestErrorMessages').html("Error!   Please Try Again!");
+                if (action === 'new') {
+                    $('#newRequestErrorMessages').show();
+                    $('#newRequestErrorMessages').html("Error!   Please Try Again!");
+                }
+                if (action === 'reAssign') {
+                    $('#requestReAssignErrorMessages').show();
+                    $('#requestReAssignErrorMessages').html("Error!   Please Try Again!");
+                }
             },
         });
     }
@@ -600,20 +842,154 @@
         });
     });
 
-    function searchRequestByToken() {
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $('#mark-payment-form').on('submit', function(e) {
+        e.preventDefault();
 
-        const outletID = JSON.parse(localStorage.getItem('me')).outlet_id;
+        // Collect form data
+        const requestID = $('#mark-payment-request-search-id').val();
+        const empty = $('#mark-payment-got-empty').val();
+        const payment = $('#mark-payment-got-payment').val();
 
-        const token = $('#mark-payment-search-token').val();
-
-        if (!token) {
-            $('#mark-payment-request-search-error').html('<small>Token is required</small>');
+        if (!empty || !payment) {
+            $('#mark-payment-request-search-error').html('<small>Mark empty handover and payment</small>');
             return;
         } else {
             $('#mark-payment-request-search-error').html('');
-            $('#mark-payment-got-empty').prop('disabled', false);
-            $('#mark-payment-got-payment').prop('disabled', false);
+        }
+
+        requestStatusUpdate(requestID, 'PAID', 'request-payment-mark', 'requestPaymentMarkErrorMessages');
+
+    });
+
+    $('#mark-pickup-form').on('submit', function(e) {
+        e.preventDefault();
+
+        // Collect form data
+        const requestID = $('#mark-pickup-request-search-id').val();
+        const pickup = $('#mark-pickup-done').val();
+
+        if (!pickup) {
+            $('#mark-pickup-request-search-error').html('<small>Mark the pick up</small>');
+            return;
+        } else {
+            $('#mark-pickup-request-search-error').html('');
+        }
+
+        requestStatusUpdate(requestID, 'COMPLETED', 'request-pickup-mark', 'requestPickupMarkErrorMessages');
+
+    });
+
+    $('#re-assign-form').on('submit', function(e) {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        e.preventDefault();
+
+        // Collect form data
+        const consumer_id = $('#re-assign-new-consumer-id').val();
+        const request_id = $('#re-assign-request-search-id').val();
+
+        return $.ajax({
+            url: '/api/v1/request/consumer/' + request_id,
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                consumer_id: consumer_id
+            }),
+            xhrFields: {
+                withCredentials: true,
+            },
+            success: function(response) {
+                if (response.data) {
+                    $('#consumer-re-assign').modal('toggle');
+                    $('#message-toast').toast('show');
+                    $('#message-toast').addClass("bg-success");
+                    $('#message-toast-body').html("Success!   Request assigned to new consumer");
+                    loadData();
+                    clearFields();
+                } else {
+                    $('#requestReAssignErrorMessages').show();
+                    $('#requestReAssignErrorMessages').html("Error!   Consumer Not Found!");
+                }
+            },
+            error: function(xhr) {
+                $('#requestReAssignErrorMessages').show();
+                $('#requestReAssignErrorMessages').html("Error!   Please Try Again!");
+            },
+        });
+
+    });
+
+    function requestStatusUpdate(requestId, status, popupId, errorElement) {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: '/api/v1/request/status/' + requestId,
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                status: status
+            }),
+            xhrFields: {
+                withCredentials: true,
+            },
+            success: function(response) {
+                $(`#${popupId}`).modal('toggle');
+                $('#message-toast').toast('show');
+                $('#message-toast').addClass("bg-success");
+                $('#message-toast-body').html("Success!   Request Updated!");
+                loadData();
+                clearFields();
+            },
+            error: function(xhr) {
+                $(`#${errorElement}`).show();
+                $(`#${errorElement}`).html("Error!   Please try again!");
+            },
+        });
+    }
+
+    function searchRequestByToken(action) {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        let token = null;
+
+        if (action === 'payment') {
+            token = $('#mark-payment-search-token').val();
+            if (!token) {
+                $('#mark-payment-request-search-error').html('<small>Token is required</small>');
+                return;
+            } else {
+                $('#mark-payment-request-search-error').html('');
+                $('#mark-payment-got-empty').prop('disabled', false);
+                $('#mark-payment-got-payment').prop('disabled', false);
+            }
+        }
+
+        if (action === 'pickup') {
+            token = $('#mark-pickup-search-token').val();
+            if (!token) {
+                $('#mark-pickup-request-search-error').html('<small>Token is required</small>');
+                return;
+            } else {
+                $('#mark-pickup-request-search-error').html('');
+                $('#mark-pickup-got-empty').prop('disabled', false);
+                $('#mark-pickup-done').prop('disabled', false);
+            }
+        }
+
+        if (action === 'reAssign') {
+            token = $('#re-assign-search-token').val();
+            if (!token) {
+                $('#re-assign-request-search-error').html('<small>Token is required</small>');
+                return;
+            } else {
+                $('#re-assign-request-search-error').html('');
+            }
         }
 
         $.ajax({
@@ -629,57 +1005,169 @@
             },
             success: function(response) {
                 if (response && response.data && response.data.consumer && response.data.gas && response.data.outlet && response.data.schedule && response.data.request) {
-                    $('#mark-payment-submit-button').prop('disabled', false);
-                    $('#mark-payment-consumer-type').val(response.data.consumer.type ? response.data.consumer.type : '~ none ~');
-                    $('#mark-payment-consumer-email').val(response.data.consumer.email ? response.data.consumer.email : '~ none ~');
-                    $('#mark-payment-consumer-nic').val(response.data.consumer.nic ? response.data.consumer.nic : '~ none ~');
-                    $('#mark-payment-consumer-phoneNo').val(response.data.consumer.phone_no ? response.data.consumer.phone_no : '~ none ~');
-                    $('#mark-payment-consumer-businessNo').val(response.data.consumer.business_no ? response.data.consumer.business_no : '~ none ~');
-
-                    $('#mark-payment-outlet-name').val(response.data.outlet.name ? response.data.outlet.name : '~ none ~');
-
-                    $('#mark-payment-schedule-date').val(response.data.schedule.schedule_date ? response.data.schedule.schedule_date : '~ none ~');
-                    $('#mark-payment-schedule-status').val(response.data.schedule.status ? response.data.schedule.status : '~ none ~');
-
-                    $('#mark-payment-gas-type').val(response.data.gas.weight ? response.data.gas.weight : '~ none ~');
-
-                    $('#mark-payment-gas-quantity').val(response.data.request.quantity ? response.data.request.quantity : '~ none ~');
-
-                    $('#mark-payment-total-price').val((response.data.gas.price * response.data.request.quantity));
-
-                    $('#mark-payment-request-search-id').val(response.data.request.id ? response.data.request.id : '~ none ~');
-
-                    if (response.data.outlet.id === outletID) {
-                        $('#mark-payment-submit-button').prop('disabled', true);
-                        $('#mark-payment-got-empty').prop('disabled', true);
-                        $('#mark-payment-got-payment').prop('disabled', true);
-                        $('#mark-payment-request-search-error').html('<small>Request not linked with this outlet.</small>');
-                    }
-
-                    if (response.data.schedule.status === 'PENDING') {
-                        $('#mark-payment-submit-button').prop('disabled', true);
-                        $('#mark-payment-got-empty').prop('disabled', true);
-                        $('#mark-payment-got-payment').prop('disabled', true);
-                        $('#mark-payment-request-search-error').html('<small>Schedule is not confirmed yet.</small>');
-                    }
+                    showSearchByTokenResult(action, response);
                 } else {
                     clearFields();
-                    $('#requestPaymentMarkErrorMessages').show();
-                    $('#requestPaymentMarkErrorMessages').html("Error!  Request not found. Please try again.");
+                    if (action === 'pickup') {
+                        $('#requestPickupMarkErrorMessages').show();
+                        $('#requestPickupMarkErrorMessages').html("Error!  Request not found. Please try again.");
+                    }
+                    if (action === 'reAssign') {
+                        $('#requestReAssignErrorMessages').show();
+                        $('#requestReAssignErrorMessages').html("Error!  Request not found. Please try again.");
+                    } else {
+                        $('#requestPaymentMarkErrorMessages').show();
+                        $('#requestPaymentMarkErrorMessages').html("Error!  Request not found. Please try again.");
+                    }
                 }
             },
             error: function(xhr) {
                 clearFields();
-                $('#requestPaymentMarkErrorMessages').show();
-                $('#requestPaymentMarkErrorMessages').html("Error!  Request not found. Please try again.");
+                if (action === 'pickup') {
+                    $('#requestPickupMarkErrorMessages').show();
+                    $('#requestPickupMarkErrorMessages').html("Error!  Request not found. Please try again.");
+                }
+                if (action === 'reAssign') {
+                    $('#requestReAssignErrorMessages').show();
+                    $('#requestReAssignErrorMessages').html("Error!  Request not found. Please try again.");
+                } else {
+                    $('#requestPaymentMarkErrorMessages').show();
+                    $('#requestPaymentMarkErrorMessages').html("Error!  Request not found. Please try again.");
+                }
             },
         });
+    }
+
+    function showSearchByTokenResult(action, response) {
+        const outletID = JSON.parse(localStorage.getItem('me')).outlet_id;
+        if (action === 'payment') {
+            $('#mark-payment-submit-button').prop('disabled', false);
+
+            $('#mark-payment-request-status').val(response.data.request.status ? response.data.request.status : '~ none ~');
+
+            $('#mark-payment-consumer-type').val(response.data.consumer.type ? response.data.consumer.type : '~ none ~');
+            $('#mark-payment-consumer-email').val(response.data.consumer.email ? response.data.consumer.email : '~ none ~');
+            $('#mark-payment-consumer-nic').val(response.data.consumer.nic ? response.data.consumer.nic : '~ none ~');
+            $('#mark-payment-consumer-phoneNo').val(response.data.consumer.phone_no ? response.data.consumer.phone_no : '~ none ~');
+            $('#mark-payment-consumer-businessNo').val(response.data.consumer.business_no ? response.data.consumer.business_no : '~ none ~');
+
+            $('#mark-payment-outlet-name').val(response.data.outlet.name ? response.data.outlet.name : '~ none ~');
+
+            $('#mark-payment-schedule-date').val(response.data.schedule.schedule_date ? response.data.schedule.schedule_date : '~ none ~');
+            $('#mark-payment-schedule-status').val(response.data.schedule.status ? response.data.schedule.status : '~ none ~');
+
+            $('#mark-payment-gas-type').val(response.data.gas.weight ? response.data.gas.weight : '~ none ~');
+
+            $('#mark-payment-gas-quantity').val(response.data.request.quantity ? response.data.request.quantity : '~ none ~');
+
+            $('#mark-payment-total-price').val((response.data.gas.price * response.data.request.quantity));
+
+            $('#mark-payment-request-search-id').val(response.data.request.id ? response.data.request.id : '~ none ~');
+
+            if (response.data.outlet.id !== outletID) {
+                $('#mark-payment-submit-button').prop('disabled', true);
+                $('#mark-payment-got-empty').prop('disabled', true);
+                $('#mark-payment-got-payment').prop('disabled', true);
+                $('#mark-payment-request-search-error').html('<small>Request not linked with this outlet.</small>');
+            }
+
+            if (response.data.schedule.status === 'PENDING') {
+                $('#mark-payment-submit-button').prop('disabled', true);
+                $('#mark-payment-got-empty').prop('disabled', true);
+                $('#mark-payment-got-payment').prop('disabled', true);
+                $('#mark-payment-request-search-error').html('<small>Schedule is not confirmed yet.</small>');
+            }
+
+            if (response.data.request.status !== 'PENDING') {
+                $('#mark-payment-submit-button').prop('disabled', true);
+                $('#mark-payment-got-empty').prop('disabled', true);
+                $('#mark-payment-got-payment').prop('disabled', true);
+                $('#mark-payment-request-search-error').html('<small>Request is not valid to mark empty / payment.</small>');
+            }
+        }
+        if (action === 'pickup') {
+            $('#mark-pickup-submit-button').prop('disabled', false);
+
+            $('#mark-pickup-request-status').val(response.data.request.status ? response.data.request.status : '~ none ~');
+
+            $('#mark-pickup-consumer-type').val(response.data.consumer.type ? response.data.consumer.type : '~ none ~');
+            $('#mark-pickup-consumer-email').val(response.data.consumer.email ? response.data.consumer.email : '~ none ~');
+            $('#mark-pickup-consumer-nic').val(response.data.consumer.nic ? response.data.consumer.nic : '~ none ~');
+            $('#mark-pickup-consumer-phoneNo').val(response.data.consumer.phone_no ? response.data.consumer.phone_no : '~ none ~');
+            $('#mark-pickup-consumer-businessNo').val(response.data.consumer.business_no ? response.data.consumer.business_no : '~ none ~');
+
+            $('#mark-pickup-outlet-name').val(response.data.outlet.name ? response.data.outlet.name : '~ none ~');
+
+            $('#mark-pickup-schedule-date').val(response.data.schedule.schedule_date ? response.data.schedule.schedule_date : '~ none ~');
+            $('#mark-pickup-schedule-status').val(response.data.schedule.status ? response.data.schedule.status : '~ none ~');
+
+            $('#mark-pickup-gas-type').val(response.data.gas.weight ? response.data.gas.weight : '~ none ~');
+
+            $('#mark-pickup-gas-quantity').val(response.data.request.quantity ? response.data.request.quantity : '~ none ~');
+
+            $('#mark-pickup-total-price').val((response.data.gas.price * response.data.request.quantity));
+
+            $('#mark-pickup-request-search-id').val(response.data.request.id ? response.data.request.id : '~ none ~');
+
+            if (response.data.outlet.id !== outletID) {
+                $('#mark-pickup-submit-button').prop('disabled', true);
+                $('#mark-pickup-got-empty').prop('disabled', true);
+                $('#mark-pickup-done').prop('disabled', true);
+                $('#mark-pickup-request-search-error').html('<small>Request not linked with this outlet.</small>');
+            }
+
+            if (response.data.schedule.status === 'PENDING') {
+                $('#mark-pickup-submit-button').prop('disabled', true);
+                $('#mark-pickup-got-empty').prop('disabled', true);
+                $('#mark-pickup-done').prop('disabled', true);
+                $('#mark-pickup-request-search-error').html('<small>Schedule is not confirmed yet.</small>');
+            }
+
+            if (response.data.request.status !== 'PAID') {
+                $('#mark-pickup-submit-button').prop('disabled', true);
+                $('#mark-pickup-got-empty').prop('disabled', true);
+                $('#mark-pickup-done').prop('disabled', true);
+                $('#mark-pickup-request-search-error').html('<small>Request is not valid to mark pickup.</small>');
+            }
+        }
+
+        if (action === 'reAssign') {
+            $('#re-assign-submit-button').prop('disabled', false);
+
+            $('#re-assign-request-status').val(response.data.request.status ? response.data.request.status : '~ none ~');
+
+            $('#re-assign-request-quantity').val(response.data.request.quantity ? response.data.request.quantity : '~ none ~');
+
+            $('#re-assign-old-consumer-type').val(response.data.consumer.type ? response.data.consumer.type : '~ none ~');
+            $('#re-assign-old-consumer-email').val(response.data.consumer.email ? response.data.consumer.email : '~ none ~');
+            $('#re-assign-old-consumer-nic').val(response.data.consumer.nic ? response.data.consumer.nic : '~ none ~');
+            $('#re-assign-old-consumer-phoneNo').val(response.data.consumer.phone_no ? response.data.consumer.phone_no : '~ none ~');
+            $('#re-assign-old-consumer-businessNo').val(response.data.consumer.business_no ? response.data.consumer.business_no : '~ none ~');
+
+            $('#re-assign-request-search-id').val(response.data.request.id ? response.data.request.id : '~ none ~');
+
+            if (response.data.outlet.id !== outletID) {
+                $('#re-assign-submit-button').prop('disabled', true);
+                $('#re-assign-request-search-error').html('<small>Request not linked with this outlet.</small>');
+            }
+
+            if (response.data.schedule.status === 'PENDING') {
+                $('#re-assign-submit-button').prop('disabled', true);
+                $('#re-assign-request-search-error').html('<small>Schedule is not confirmed yet.</small>');
+            }
+
+            if (response.data.request.status !== 'PENDING') {
+                $('#re-assign-submit-button').prop('disabled', true);
+                $('#re-assign-request-search-error').html('<small>Request is not valid to re-assign.</small>');
+            }
+        }
     }
 
     function clearFields() {
         $('#new-request-consumer-type').val(null);
         $('#consumer-search-input').val(null);
         $('#new-request-gas-quantity').val(null);
+
         $('#mark-payment-consumer-type').val(null);
         $('#mark-payment-consumer-email').val(null);
         $('#mark-payment-consumer-nic').val(null);
@@ -692,6 +1180,38 @@
         $('#mark-payment-gas-quantity').val(null);
         $('#mark-payment-total-price').val(null);
         $('#mark-payment-request-search-id').val(null);
+        $('#mark-payment-request-status').val(null);
+
+        $('#mark-pickup-consumer-type').val(null);
+        $('#mark-pickup-consumer-email').val(null);
+        $('#mark-pickup-consumer-nic').val(null);
+        $('#mark-pickup-consumer-phoneNo').val(null);
+        $('#mark-pickup-consumer-businessNo').val(null);
+        $('#mark-pickup-outlet-name').val(null);
+        $('#mark-pickup-schedule-date').val(null);
+        $('#mark-pickup-schedule-status').val(null);
+        $('#mark-pickup-gas-type').val(null);
+        $('#mark-pickup-gas-quantity').val(null);
+        $('#mark-pickup-total-price').val(null);
+        $('#mark-pickup-request-search-id').val(null);
+        $('#mark-pickup-request-status').val(null);
+
+        $('#re-assign-new-consumer-type').val(null);
+        $('#re-assign-new-consumer-email').val(null);
+        $('#re-assign-new-consumer-nic').val(null);
+        $('#re-assign-new-consumer-phoneNo').val(null);
+        $('#re-assign-new-consumer-businessNo').val(null);
+        $('#re-assign-new-consumer-id').val(null);
+        $('#re-assign-search-email').val(null);
+        $('#re-assign-search-token').val(null);
+        $('#re-assign-old-consumer-type').val(null);
+        $('#re-assign-old-consumer-email').val(null);
+        $('#re-assign-old-consumer-nic').val(null);
+        $('#re-assign-old-consumer-phoneNo').val(null);
+        $('#re-assign-old-consumer-businessNo').val(null);
+        $('#re-assign-request-search-id').val(null);
+        $('#re-assign-request-status').val(null);
+        $('#re-assign-request-quantity').val(null);
     }
 </script>
 

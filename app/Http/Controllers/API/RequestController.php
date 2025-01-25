@@ -15,6 +15,7 @@ use App\RequestStatusType;
 use App\StatusType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class RequestController extends Controller
 {
@@ -87,6 +88,15 @@ class RequestController extends Controller
         ], 200);
     }
 
+    public function generateUniqueToken()
+    {
+        do {
+            $token = 'GAS-' . Str::random(3) . '-' . Str::random(3); // Generate the token
+        } while (requestModel::where('token', $token)->exists()); // Check uniqueness
+
+        return $token;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -127,7 +137,7 @@ class RequestController extends Controller
             'quantity' => $request->get('quantity'),
             'status' => RequestStatusType::Pending->value,
             'expired_at' => date('Y-m-d', strtotime(now() . ' + 14 days')),
-            'token' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 6)
+            'token' => $this->generateUniqueToken()
         ]);
 
         if ($newRequest) {
@@ -280,7 +290,7 @@ class RequestController extends Controller
             'consumer_id' => 'required'
         ]);
 
-        $requestModel = requestModel::where('request_id', $id)->firstOrFail();
+        $requestModel = requestModel::where('id', $id)->firstOrFail();
         $requestModel->update(['consumer_id' => $request->get('consumer_id')]);
         return response()->json([
             'status' => true,
