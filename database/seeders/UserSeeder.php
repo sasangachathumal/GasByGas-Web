@@ -55,5 +55,13 @@ class UserSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        DB::table('users')->insert([
+            'email' => 'suranga@gasbygas.com',
+            'password' => Hash::make('secret'),
+            'type' => UserType::Consumer->value,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }

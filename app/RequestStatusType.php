@@ -6,6 +6,6 @@ enum RequestStatusType: string
 {
     case Pending = 'PENDING';
     case Paid = 'PAID';
-    case Picked = 'PICKED';
+    case Completed = 'COMPLETED';
     case Expired = 'EXPIRED';
 }

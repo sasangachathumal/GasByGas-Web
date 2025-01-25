@@ -8,6 +8,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class RequestSeeder extends Seeder
 {
@@ -22,7 +23,7 @@ class RequestSeeder extends Seeder
             'consumer_id' => 1,
             'type' => RequestType::Customer->value,
             'status' => RequestStatusType::Pending->value,
-            'token' => 'GAS-00534',
+            'token' => 'GAS-' . Str::random(3) . '-' . Str::random(3),
             'quantity' => 1,
             'expired_at' => date('Y-m-d', strtotime(now().' + 14 days')),
             'created_at' => now(),
@@ -35,7 +36,7 @@ class RequestSeeder extends Seeder
             'consumer_id' => 2,
             'type' => RequestType::Business->value,
             'status' => RequestStatusType::Pending->value,
-            'token' => 'GAS-00535',
+            'token' => 'GAS-' . Str::random(3) . '-' . Str::random(3),
             'quantity' => 24,
             'expired_at' => date('Y-m-d', strtotime(now().' + 14 days')),
             'created_at' => now(),

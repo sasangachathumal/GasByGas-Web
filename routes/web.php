@@ -51,8 +51,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('schedule', function () {return view('outlet/schedule-management');})->name('schedule');
 
-        Route::get('gas-request', function () {return view('outlet/gas-request-management');})->name('gas-request');
-
         Route::get('/login', function () {return view('outlet/outlet-dashboard');});
     });
 
