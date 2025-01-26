@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             'email' => 'admin@gasbygas.com',
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Admin->value,
             'created_at' => now(),
             'updated_at' => now()
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             'email' => 'kumara@gasbygas.com',
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Outlet_Manager->value,
             'created_at' => now(),
             'updated_at' => now()
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             'email' => 'sandeepa@gasbygas.com',
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Outlet_Manager->value,
             'created_at' => now(),
             'updated_at' => now()
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             'email' => 'aravinda@gasbygas.com',
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Consumer->value,
             'created_at' => now(),
             'updated_at' => now()
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             'email' => 'business@gasbygas.com',
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Consumer->value,
             'created_at' => now(),
             'updated_at' => now()
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
 
         DB::table('users')->insert([
             'email' => 'suranga@gasbygas.com',
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Consumer->value,
             'created_at' => now(),
             'updated_at' => now()

@@ -96,3 +96,6 @@ Route::middleware('web')->group(function () {
         Route::delete('/outletManager/{id}', [OutletManagerController::class, 'destroy']);
     });
 });
+
+// @TODO - This is tempery api to send gas pickup emails to consumers
+Route::post('/schedule/pickup-emails', [ScheduleController::class, 'sendPickupEmails']);

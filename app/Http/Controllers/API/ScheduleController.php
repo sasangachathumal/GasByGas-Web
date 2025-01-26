@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-
+use App\Mail\GasPickupReminderMail;
+use App\Mail\GasRequestPaymentReminderMail;
+use App\Models\consumer;
+use App\Models\gas;
 use App\Models\schedule;
 use App\Models\outlet;
+use App\Models\requestModel;
+use App\Models\User;
 use App\StatusType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ScheduleController extends Controller
 {
@@ -109,14 +115,50 @@ class ScheduleController extends Controller
             'schedule_date' => 'nullable',
             'max_quantity' => 'nullable'
         ]);
-
+        // get schedule from id
         $schedule = schedule::findOrFail($id);
+
+        // check the new request status is approved and status in database and new status not the same
+        // if yes then send the emails to consumers
+        if (($request->status === StatusType::Approved->value) && ($request->status != $schedule->status)) {
+            $this->sendStatusEmails($schedule);
+        }
+
+        // Update schedule with new data
         $schedule->update($request->all());
+
         return response()->json([
             'status' => true,
             'message' => 'Schedule updated successfully',
             'data' => $schedule
         ], 201);
+    }
+
+    public function sendStatusEmails($schedule)
+    {
+        // get outlet name
+        $outletName = outlet::query()->select('name')->where('id', '=', $schedule->outlet_id)->first();
+
+        // get all the request related to the schedule
+        $requestList = requestModel::query()
+            ->select('consumer_id', 'token', 'gas_id', 'id', 'quantity')
+            ->where('schedule_id', '=', $schedule->id)
+            ->get();
+        foreach ($requestList as $singleRequest) {
+            // get gas price
+            $gasPrice = gas::query()->select('price')->where('id', '=', $singleRequest->gas_id)->first();
+            // calculate total
+            $totalPrice = ($singleRequest->quantity * $gasPrice->price);
+            // get consumer data from the consumer tabel
+            $consumer = consumer::query()->where('id', '=', $singleRequest->consumer_id)->first();
+            // get consumer email from the user tabel
+            $consumerEmail = User::query()->select('email')->where('id', '=', $consumer->user_id)->first();
+            // get the request token
+            $token = $singleRequest->token;
+            // Send confimation Email
+            // @TODO - commented for now
+            // Mail::to($consumerEmail->email)->send(new GasRequestPaymentReminderMail($token, $totalPrice, $outletName->name, $consumer->name));
+        }
     }
 
     /**
@@ -131,5 +173,32 @@ class ScheduleController extends Controller
             'status' => true,
             'message' => 'Schedule deleted successfully'
         ], 204);
+    }
+
+    // @TODO need to replace with realtime event that check and send emails automaticaly
+    // for now pickup enamils send to the first schedule when this method get called
+    public function sendPickupEmails()
+    {
+        // get schedule from id
+        $schedule = schedule::all()->first();
+        // get outlet name
+        $outletName = outlet::query()->select('name')->where('id', '=', $schedule->outlet_id)->first();
+
+        $pickupDate = date('Y-m-d', strtotime(now() . ' + 1 day'));
+
+        // get all the request related to the schedule
+        $requestList = requestModel::query()
+            ->select('consumer_id', 'token', 'gas_id', 'id', 'quantity')
+            ->where('schedule_id', '=', $schedule->id)
+            ->get();
+        foreach ($requestList as $singleRequest) {
+            // get consumer data from the consumer tabel
+            $consumer = consumer::query()->where('id', '=', $singleRequest->consumer_id)->first();
+            // get consumer email from the user tabel
+            $consumerEmail = User::query()->select('email')->where('id', '=', $consumer->user_id)->first();
+            // Send confimation Email
+            // @TODO - commented for now
+            // Mail::to($consumerEmail->email)->send(new GasPickupReminderMail($outletName->name, $pickupDate, $consumer->name));
+        }
     }
 }
