@@ -57,7 +57,7 @@ class OutletManagerController extends Controller
 
         $user = User::create([
             'email' => $request->email,
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' =>  UserType::Outlet_Manager->value
         ]);
         if ($user) {

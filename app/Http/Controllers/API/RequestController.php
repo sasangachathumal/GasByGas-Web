@@ -19,15 +19,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use PhpParser\Node\Expr\Cast\Object_;
+use App\Mail\GasRequestConfirmMail;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of gas requests.
      */
     public function index()
     {
+        // get all the gas requests
         $allRequests = requestModel::all();
 
         $combinedResults = $allRequests->map(function ($request) {
@@ -73,6 +75,7 @@ class RequestController extends Controller
             ];
         });
 
+        // send 200 response with gas requests
         return response()->json([
             'status' => true,
             'message' => 'Requests retrieved successfully',
@@ -80,16 +83,22 @@ class RequestController extends Controller
         ], 200);
     }
 
+    /**
+     * Get all the gas request belongs to loged in user
+     */
     public function getAllByLoginUser()
     {
+        // get login user
         $user = Auth::user();
         $combinedResults = null;
+        // check user type and call separate methods to get requests
         if ($user && $user->type === UserType::Outlet_Manager->value) {
             $combinedResults = $this->outletManagerRequests($user->id);
         } else if ($user && $user->type === UserType::Consumer->value) {
             $combinedResults = $this->consumerRequests($user->id);
         }
 
+        // send 200 response with gas requests
         return response()->json([
             'status' => true,
             'message' => 'Requests retrieved successfully',
@@ -97,23 +106,34 @@ class RequestController extends Controller
         ], 200);
     }
 
+    /**
+     * Return gas requests that related to the outlet that login outlet manager belongs
+     */
     public function outletManagerRequests($userId)
     {
         $allOutletRequests = array();
+        // get outlet ID by joining user with outlet_manager tables
         $outletId = outlet_manager::join('users', 'outlet_managers.user_id', '=', 'users.id')
             ->select('outlet_managers.outlet_id')
             ->where('outlet_managers.user_id', '=', $userId)
             ->first();
+
         if ($outletId->outlet_id) {
+            // get all the schedules related to that outlet
             $outletSchedules = schedule::query()
                 ->where('outlet_id', '=', $outletId->outlet_id)
                 ->get();
+
             if (count($outletSchedules) > 0) {
+                // loop through schedule list
                 foreach ($outletSchedules as $schedule) {
+                    // get requests related to each schedule
                     $scheduleRequest = requestModel::query()
                         ->where('schedule_id', '=', $schedule->id)
                         ->get();
+
                     if (count($scheduleRequest) > 0) {
+                        // loop through request list
                         foreach ($scheduleRequest as $request) {
                             // Get gas data for the current request
                             $gasData = gas::query()
@@ -163,17 +183,24 @@ class RequestController extends Controller
         }
     }
 
+    /**
+     * Return gas requests that related to the consumer that login.
+     */
     public function consumerRequests($userId)
     {
+        // get consumer ID by joining users with consumers tables
         $consumerId = consumer::join('users', 'consumers.user_id', '=', 'users.id')
             ->select('consumers.id')
             ->where('consumers.user_id', '=', $userId)
             ->first();
+
         if ($consumerId) {
+            // get all the request related to the consumer id
             $consumerRequest = requestModel::query()
                 ->where('consumer_id', '=', $consumerId->id)
                 ->get();
             if (count($consumerRequest) > 0) {
+                // loop through each request and get data
                 $combinedResults = $consumerRequest->map(function ($request) {
                     // Get gas data for the current request
                     $gasData = gas::query()
@@ -221,6 +248,9 @@ class RequestController extends Controller
         }
     }
 
+    /**
+     * Get row count of request table in the database
+     */
     public function count()
     {
         $requestDataCount = requestModel::query()
@@ -233,6 +263,9 @@ class RequestController extends Controller
         ], 200);
     }
 
+    /**
+     * Generate new unique gas request token
+     */
     public function generateUniqueToken()
     {
         do {
@@ -247,6 +280,7 @@ class RequestController extends Controller
      */
     public function store(Request $request)
     {
+        // validate request body data
         $request->validate([
             'schedule_id' => 'required|exists:schedules,id',
             'gas_id' => 'required|exists:gas,id',
@@ -255,8 +289,11 @@ class RequestController extends Controller
             'quantity' => 'required|string',
         ]);
 
+        // get All requests related to got consumer_id
         $allRequests = requestModel::all()->where('consumer_id', '=', $request->consumer_id);
 
+        // check if there any incompete request there for the same consumer
+        // if yes, then return 400 response with error message
         if (count($allRequests) > 0) {
             foreach ($allRequests as $singleRequest) {
                 if (($singleRequest->status == RequestStatusType::Pending->value) || ($singleRequest->status == RequestStatusType::Paid->value)) {
@@ -274,6 +311,17 @@ class RequestController extends Controller
             }
         }
 
+        // get consumer data from the consumer tabel
+        $consumer = consumer::query()->where('id', '=', $request->consumer_id)->first();
+
+        // get consumer email from the user tabel
+        $consumerEmail = User::query()->select('email')->where('id', '=', $consumer->user_id)->first();
+
+        // get the token and expire date generated
+        $token = $this->generateUniqueToken();
+        $expire_date = date('Y-m-d', strtotime(now() . ' + 14 days'));
+
+        // Save new request to database
         $newRequest = requestModel::create([
             'schedule_id' => $request->get('schedule_id'),
             'gas_id' => $request->get('gas_id'),
@@ -281,21 +329,27 @@ class RequestController extends Controller
             'type' => $request->get('type'),
             'quantity' => $request->get('quantity'),
             'status' => RequestStatusType::Pending->value,
-            'expired_at' => date('Y-m-d', strtotime(now() . ' + 14 days')),
-            'token' => $this->generateUniqueToken()
+            'expired_at' => $expire_date,
+            'token' => $token
         ]);
 
         if ($newRequest) {
+            // if request save then update schedule available quantity
             $schedule = schedule::findOrFail($newRequest->schedule_id);
             $schedule->update([
                 'available_quantity' => ($schedule->available_quantity - $newRequest->quantity)
             ]);
+            // Send confimation Email
+            // @TODO - commented for now
+            // Mail::to($consumerEmail->email)->send(new GasRequestConfirmMail($token, $expire_date, $consumer->name));
+            // send 200 response back
             return response()->json([
                 'status' => true,
                 'message' => 'Request created successfully',
                 'data' => $newRequest
             ], 201);
         } else {
+            // send 400 response back if request save fail
             return response()->json([
                 'status' => false,
                 'message' => 'Request created failed',
@@ -359,6 +413,9 @@ class RequestController extends Controller
         ], 200);
     }
 
+    /**
+     * Search a request by token and get all the data related to it
+     */
     public function searchByToken($token)
     {
         $allRequests = requestModel::all()->where('token', '=', $token);
@@ -413,7 +470,7 @@ class RequestController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the request status.
      */
     public function updateRequestStatus(Request $request, $id)
     {
@@ -421,7 +478,9 @@ class RequestController extends Controller
             'status' => 'required|string',
         ]);
 
+        // get request by id
         $requestModel = requestModel::findOrFail($id);
+
         $requestModel->update(['status' => $request->get('status')]);
         return response()->json([
             'status' => true,
@@ -429,14 +488,37 @@ class RequestController extends Controller
         ], 201);
     }
 
+    /**
+     * Assign new consumer to the same request
+     */
     public function assignRequestToNewConsumer(Request $request, $id)
     {
         $request->validate([
             'consumer_id' => 'required'
         ]);
 
+        // get request by id
         $requestModel = requestModel::where('id', $id)->firstOrFail();
+
+
+        // get old consumer data from the consumer tabel
+        // $oldConsumer = consumer::query()->where('id', '=', $requestModel->consumer_id)->first();
+
+        // get old consumer email from the user tabel
+        // $oldConsumerEmail = User::query()->select('email')->where('id', '=', $oldConsumer->user_id)->first();
+
+        // get new consumer data from the consumer tabel
+        // $newConsumer = consumer::query()->where('id', '=', $request->consumer_id)->first();
+
+        // get new consumer email from the user tabel
+        // $newConsumerEmail = User::query()->select('email')->where('id', '=', $newConsumer->user_id)->first();
+
+        // update reuest with new consumer
         $requestModel->update(['consumer_id' => $request->get('consumer_id')]);
+
+        // Send confimation Email to old consumer
+        // Mail::to($oldConsumerEmail->email)->send(new GasRequestConfirmMail($token, $expire_date, $consumer->email));
+
         return response()->json([
             'status' => true,
             'message' => 'Request assign to a consumer successfully',

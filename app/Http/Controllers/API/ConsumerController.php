@@ -65,7 +65,7 @@ class ConsumerController extends Controller
 
         $user = User::create([
             'email' => $request->email,
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('qwertyui'),
             'type' => UserType::Consumer->value
         ]);
         if ($user) {
