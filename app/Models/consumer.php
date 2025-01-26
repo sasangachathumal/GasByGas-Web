@@ -25,4 +25,7 @@ class consumer extends Model
         'business_no',
         'status'
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
 }

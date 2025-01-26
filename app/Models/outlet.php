@@ -22,4 +22,7 @@ class outlet extends Model
         'address',
         'phone_no'
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
 }

@@ -23,4 +23,7 @@ class schedule extends Model
         'max_quantity',
         'available_quantity'
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
 }
