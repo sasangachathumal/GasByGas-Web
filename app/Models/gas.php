@@ -22,4 +22,7 @@ class gas extends Model
         'weight',
         'price',
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
 }

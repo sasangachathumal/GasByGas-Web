@@ -28,4 +28,6 @@ class requestModel extends Model
         'quantity',
         'expired_at'
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
 }

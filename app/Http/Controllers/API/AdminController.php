@@ -93,13 +93,13 @@ class AdminController extends Controller
         if ($adminQuery) {
             return response()->json([
                 'status' => true,
-                'message' => 'user retrieved successfully',
+                'message' => 'Admin retrieved successfully',
                 'data' => $adminQuery->first() ?? (object)[]
             ], 200);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'user retrieved fail',
+                'message' => 'Admin retrieved fail',
             ], 400);
         }
     }

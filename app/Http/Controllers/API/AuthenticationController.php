@@ -30,6 +30,10 @@ class AuthenticationController extends Controller
                 'user' => $user
             ], 200);
         }
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid credentials'
+        ], 422);
     }
 
     public function forgotPassword(Request $request)
@@ -68,11 +72,6 @@ class AuthenticationController extends Controller
         return $status === Password::PASSWORD_RESET
             ? response()->json(['status' => true, 'message' => __($status)], 200)
             : response()->json(['status' => false, 'message' => __($status)], 400);
-    }
-
-    public function me()
-    {
-        return response()->json(auth()->user());
     }
 
     public function logout()

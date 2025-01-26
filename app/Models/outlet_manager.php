@@ -22,4 +22,7 @@ class outlet_manager extends Model
         'name',
         'phone_no',
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
 }
