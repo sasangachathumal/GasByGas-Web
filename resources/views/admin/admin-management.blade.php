@@ -139,12 +139,14 @@
 
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/admin',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -255,12 +257,14 @@
 
     function getSingleAdmin(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/admin/' + id,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -277,12 +281,14 @@
 
     function deleteSingleAdmin(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/admin/' + id,
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -302,6 +308,7 @@
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
         const name = $('#new-admin-name-input').val();
@@ -315,6 +322,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({
@@ -345,6 +353,7 @@
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
         const id = $('#edit-admin-id-input').val();
@@ -358,6 +367,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({

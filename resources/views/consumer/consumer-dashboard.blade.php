@@ -91,7 +91,7 @@
                             <div class="form-group">
                                 <label for="new-request-outlet-select" class="form-control-label">Select the Outlet</label>
                                 <select class="form-control" id="new-request-outlet-select" required>
-                                    <option value="-1">~ Schedules ~</option>
+                                    <option value="-1">~ Outlet ~</option>
                                 </select>
                             </div>
                         </div>
@@ -152,12 +152,14 @@
 
     function getAvailableOutlets() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/outlet',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -186,12 +188,14 @@
 
     function getAvailableGasTypes() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/gas',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -234,12 +238,15 @@
 
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const userID = JSON.parse(localStorage.getItem('me')).user_id;
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/request/user',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -280,6 +287,7 @@
     function getScheduleQuantity(outletId) {
         $('#newRequestErrorMessages').hide();
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         return $.ajax({
             url: '/api/v1/schedule/outlet/' + outletId,
@@ -287,6 +295,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -316,6 +325,7 @@
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
         const consumerId = $('#new-request-consumer-id').val();
@@ -338,6 +348,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({

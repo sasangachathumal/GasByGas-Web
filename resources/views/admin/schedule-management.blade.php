@@ -259,12 +259,14 @@
 
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/schedule',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -347,12 +349,14 @@
 
     function getSingleSchedule(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/schedule/' + id,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -411,12 +415,14 @@
 
     function deleteSingleSchedule(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/schedule/' + id,
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -441,12 +447,14 @@
             name = $('#outlet-edit-search-input').val();
         }
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/outlet/search?search=' + name,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -482,6 +490,7 @@
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
         const date = $('#new-schedule-date').val();
@@ -495,6 +504,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({
@@ -529,6 +539,7 @@
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
         const date = $('#edit-schedule-date').val();
@@ -543,6 +554,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({

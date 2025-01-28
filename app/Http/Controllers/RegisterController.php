@@ -52,10 +52,12 @@ class RegisterController extends Controller
             if ($consumer) {
                 session()->flash('success', 'Your account has been created.');
                 $authUser = Auth::login($user);
+                $token = $user->createToken('auth_token')->plainTextToken;
                 return response()->json([
                     'status' => true,
                     'message' => 'Registration successful',
-                    'user' => $authUser
+                    'user' => $authUser,
+                    'access_token' => $token
                 ], 200);
             } else {
                 return response()->json([

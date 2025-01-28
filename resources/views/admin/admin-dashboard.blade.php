@@ -185,12 +185,14 @@
 
     function getRequestCount() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/request/count',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -207,12 +209,14 @@
 
     function getScheduelCount() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/schedule/count',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -229,12 +233,14 @@
 
     function getOutletCount() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/outlet/count',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -251,12 +257,14 @@
 
     function getConsumerCount() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/consumer/count',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {

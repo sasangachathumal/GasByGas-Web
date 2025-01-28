@@ -154,6 +154,7 @@
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Accept': 'application/json',
+                            'Authorization': `Bearer ${registerResponse.access_token}`
                         },
                         contentType: 'application/json',
                         xhrFields: {
@@ -161,6 +162,7 @@
                         },
                         success: function(response) {
                             localStorage.setItem('me', JSON.stringify(response.data));
+                            localStorage.setItem('access_token', JSON.stringify(registerResponse.access_token));
                             if (registerResponse.user.type === "CONSUMER") {
                                 window.location.href = "/consumer/dashboard";
                             }

@@ -29,15 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('web')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
-        Route::post('/login', [AuthenticationController::class, 'login']);
-        Route::post('/register', [RegisterController::class, 'store']);
-        Route::post('/forgot-password', [AuthenticationController::class, 'forgotPassword']);
-        Route::post('/reset-password', [AuthenticationController::class, 'resetPassword']);
-        // Route::post('/me', [AuthenticationController::class, 'me'])->middleware('auth:sanctum');
-        Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
-
         Route::get('/users', [UserController::class, 'index']);
         Route::get('/me', [UserController::class, 'me']);
 
@@ -95,6 +88,14 @@ Route::middleware('web')->group(function () {
         Route::put('/outletManager/{id}', [OutletManagerController::class, 'update']);
         Route::delete('/outletManager/{id}', [OutletManagerController::class, 'destroy']);
     });
+});
+
+Route::prefix('v1')->group(function () {
+    Route::post('/login', [AuthenticationController::class, 'login']);
+    Route::post('/register', [RegisterController::class, 'store']);
+    Route::post('/forgot-password', [AuthenticationController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthenticationController::class, 'resetPassword']);
+    Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
 });
 
 // @TODO - This is tempery api to send gas pickup emails to consumers

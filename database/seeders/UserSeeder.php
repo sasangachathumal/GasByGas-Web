@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'email' => 'business@gasbygas.com',
+            'email' => 'starcake@gasbygas.com',
             'password' => Hash::make('qwertyui'),
             'type' => UserType::Consumer->value,
             'created_at' => now(),

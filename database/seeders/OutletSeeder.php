@@ -16,8 +16,8 @@ class OutletSeeder extends Seeder
     public function run(): void
     {
         DB::table('outlets')->insert([
-            'email' => 'outlet1@gasbygas.com',
-            'name' => 'ABC Mart',
+            'email' => 'pereraSt@gasbygas.com',
+            'name' => 'Perera Stores',
             'address' => 'Gopaninuwala, Hikkaduwa.',
             'phone_no' => '+094710453447',
             'created_at' => now(),
@@ -25,8 +25,8 @@ class OutletSeeder extends Seeder
         ]);
 
         DB::table('outlets')->insert([
-            'email' => 'outlet2@gasbygas.com',
-            'name' => 'SDF Gas Mart',
+            'email' => 'araliyaGas@gasbygas.com',
+            'name' => 'Araliya Gas Mart',
             'address' => 'Pinkanda, Dodanduwa.',
             'phone_no' => '+094710873447',
             'created_at' => now(),
