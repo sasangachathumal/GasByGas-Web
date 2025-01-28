@@ -97,6 +97,7 @@
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
                             'Accept': 'application/json',
+                            'Authorization': `Bearer ${loginResponse.access_token}`
                         },
                         contentType: 'application/json',
                         xhrFields: {
@@ -104,6 +105,7 @@
                         },
                         success: function(response) {
                             localStorage.setItem('me', JSON.stringify(response.data));
+                            localStorage.setItem('access_token', JSON.stringify(loginResponse.access_token));
                             if (loginResponse.user.type === "ADMIN") {
                                 window.location.href = "/admin/dashboard";
                             }

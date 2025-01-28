@@ -113,12 +113,14 @@
 
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/consumer',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -198,12 +200,14 @@
 
     function getSingleConsumer(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/consumer/' + id,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -258,12 +262,14 @@
 
     function deleteSingleConsumer(id) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         return $.ajax({
             url: '/api/v1/consumer/' + id,
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {

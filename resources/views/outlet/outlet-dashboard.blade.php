@@ -592,12 +592,14 @@
     function getAvailableSchedules() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         const outletID = JSON.parse(localStorage.getItem('me')).id;
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/schedule/outlet/' + outletID,
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -626,12 +628,14 @@
 
     function getAvailableGasTypes() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/gas',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -677,12 +681,14 @@
 
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/request/user',
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -724,6 +730,7 @@
         $('#newRequestErrorMessages').hide();
         let search = null;
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         if (action === 'reAssign') {
             search = $('#re-assign-search-email').val();
         }
@@ -736,6 +743,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
@@ -789,6 +797,7 @@
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
         const consumerId = $('#new-request-consumer-id').val();
@@ -811,6 +820,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({
@@ -881,6 +891,7 @@
 
     $('#re-assign-form').on('submit', function(e) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         e.preventDefault();
 
         // Collect form data
@@ -893,6 +904,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({
@@ -924,12 +936,14 @@
 
     function requestStatusUpdate(requestId, status, popupId, errorElement) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/request/status/' + requestId,
             method: 'PUT',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             data: JSON.stringify({
@@ -955,6 +969,7 @@
 
     function searchRequestByToken(action) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         let token = null;
 
@@ -998,6 +1013,7 @@
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
             },
             contentType: 'application/json',
             xhrFields: {
