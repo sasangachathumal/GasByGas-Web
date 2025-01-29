@@ -1,5 +1,7 @@
 @extends('layouts.user_type.auth')
 
+
+
 @section('content')
 
 <div>
@@ -29,11 +31,13 @@
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Max Quantity
+              
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Available Quantity
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+             
                                         Outlet Name
                                     </th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -44,11 +48,13 @@
                                     </th>
                                 </tr>
                             </thead>
+            
                             <tbody id="scheduleTableBody">
                                 <tr>
                                     <td colspan="8">Loading Schedules ....</td>
                                 </tr>
                             </tbody>
+            
                         </table>
                     </div>
                 </div>
@@ -72,6 +78,7 @@
                     <form id="edit-schedule-form" role="form" method="POST">
                         <div class="row">
                             <div class="col-md-6 ms-auto">
+                
                                 <h4>Outlet Details</h4>
                                 <div class="form-group" id="view-schedule-outlet-name-container">
                                     <label for="view-schedule-outlet-name" class="form-control-label">Outlet Name</label>
@@ -136,6 +143,7 @@
         loadData();
     });
 
+  
     function loadData() {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         const outletID = JSON.parse(localStorage.getItem('me')).id;
@@ -159,9 +167,11 @@
                 loadDataToTable(xhr);
             },
         });
+    
     }
 
     function loadDataToTable(response) {
+ 
         let returnData = '';
         const tbody = document.querySelector('#scheduleTableBody');
         tbody.innerHTML = '';
@@ -171,11 +181,15 @@
                         <tr>
                             <td class='align-middle text-center'>${schedule.id ? schedule.id : '~none~'}</td>
                             <td class='align-middle text-center'>${schedule.status ? schedule.status : '~none~'}</td>
+          
                             <td class='align-middle text-center'>${schedule.schedule_date ? schedule.schedule_date : '~none~'}</td>
                             <td class='align-middle text-center'>${schedule.max_quantity ? schedule.max_quantity : '~none~'}</td>
+        
                             <td class='align-middle text-center'>${schedule.available_quantity ? schedule.available_quantity : '~none~'}</td>
                             <td class='align-middle text-center'>${schedule.name ? schedule.name : '~none~'}</td>
+        
                             <td class='align-middle text-center'>${schedule.email ? schedule.email : '~none~'}</td>
+     
                             <td class='align-middle text-center'>
                                 <span>
                                     <i class="cursor-pointer fas fa-expand-arrows-alt text-secondary mx-3" onclick="viewSelectedSchedule(${schedule.id})"></i>
@@ -185,6 +199,7 @@
                     `;
             });
         } else {
+    
             tbody.innerHTML = '<tr><td colspan="3">No schedules found</td></tr>';
         }
     }
@@ -195,6 +210,7 @@
                 .done(function(result) {
                     if (result.data && result.data.id) {
                         $('#view-schedule-outlet-name').val(result.data.out_name);
+                        
                         $('#view-schedule-outlet-email').val(result.data.out_email);
                         $('#view-schedule-outlet-phoneNo').val(result.data.out_phone_no);
                         $('#view-schedule-outlet-status').val(result.data.out_status);
