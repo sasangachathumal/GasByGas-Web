@@ -23,8 +23,8 @@
                         <i class="fas fa-money-check-alt mx-2"></i>
                         <span>Empty / Payments</span>
                     </div>
-                </div>
-            </div>
+                 </div>
+             </div>
         </div>
         <div class="col-3">
             <div class="card mx-2 mb-4 bg-gradient-success text-white text-bolder cursor-pointer"
@@ -53,12 +53,12 @@
                 <div class="card mx-2 mb-4 bg-gradient-secondary text-white text-bolder cursor-pointer">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-center">
-                            <i class="fas fa-th-list mx-2"></i>
+                             <i class="fas fa-th-list mx-2"></i>
                             <span>View Gas Schedule</span>
                         </div>
                     </div>
                 </div>
-            </a>
+             </a>
         </div>
     </div>
     <div class="row">
@@ -892,13 +892,16 @@
     $('#re-assign-form').on('submit', function(e) {
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         const access_token = JSON.parse(localStorage.getItem('access_token'));
+      
         e.preventDefault();
 
         // Collect form data
         const consumer_id = $('#re-assign-new-consumer-id').val();
-        const request_id = $('#re-assign-request-search-id').val();
+      
+        const request_id = $('#re-assign-request-search-id').val(); 
 
-        return $.ajax({
+        
+          return $.ajax({
             url: '/api/v1/request/consumer/' + request_id,
             method: 'PUT',
             headers: {
@@ -935,7 +938,9 @@
     });
 
     function requestStatusUpdate(requestId, status, popupId, errorElement) {
+    
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+      
         const access_token = JSON.parse(localStorage.getItem('access_token'));
         $.ajax({
             url: '/api/v1/request/status/' + requestId,
@@ -968,7 +973,9 @@
     }
 
     function searchRequestByToken(action) {
+     
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
+     
         const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         let token = null;
@@ -1055,7 +1062,9 @@
     }
 
     function showSearchByTokenResult(action, response) {
+       
         const outletID = JSON.parse(localStorage.getItem('me')).outlet_id;
+       
         if (action === 'payment') {
             $('#mark-payment-submit-button').prop('disabled', false);
 
