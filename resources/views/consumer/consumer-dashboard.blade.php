@@ -128,7 +128,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
+                        <button type="submit" id="new-request-save-button" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>
@@ -322,20 +322,22 @@
 
     $('#new-request-form').on('submit', function(e) {
         e.preventDefault();
+        $('#new-request-save-button').prop('disabled', true);
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         const access_token = JSON.parse(localStorage.getItem('access_token'));
 
         // Collect form data
-        const consumerId = $('#new-request-consumer-id').val();
+        const consumerId = JSON.parse(localStorage.getItem('me')).id;
         const quantity = $('#new-request-gas-quantity').val();
-        const type = $('#new-request-consumer-type').val();
+        const type = JSON.parse(localStorage.getItem('me')).type;
         const gasId = $('#new-request-gasType-select').val();
         const scheduleId = $('#new-request-outlet-select').val();
 
         if (quantity <= 0) {
             $('#new-request-gas-quantity-error').html('<small>Enter valid quantity</small>');
+            $('#new-request-save-button').prop('disabled', false);
             return;
         } else {
             $('#new-request-gas-quantity-error').html('');
@@ -362,6 +364,7 @@
                 withCredentials: true,
             },
             success: function(response) {
+                $('#new-request-save-button').prop('disabled', fasle);
                 $('#new-request').modal('toggle');
                 $('#message-toast').toast('show');
                 $('#message-toast').addClass("bg-success");
@@ -371,6 +374,7 @@
             },
             error: function(xhr) {
                 $('#newRequestErrorMessages').show();
+                $('#new-request-save-button').prop('disabled', fasle);
                 if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.ACTIVE_REQ) {
                     $('#newRequestErrorMessages').html("Error!  " + xhr.responseJSON.errors.ACTIVE_REQ.message);
                 } else {
@@ -384,6 +388,10 @@
         $('#new-request-consumer-type').val(null);
         $('#consumer-search-input').val(null);
         $('#new-request-gas-quantity').val(null);
+        $('#new-request-gasType-select').val('-1');
+        $('#new-request-outlet-select').val('-1');
+        $('#new-request-seleted-gas-price').val(null);
+        $('#new-request-seleted-schedule-quantity').val(null);
     }
 </script>
 

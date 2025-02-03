@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="row" style="display: none;" id="edit-option-container">
                                     <div class="col-md-6">
-                                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
+                                        <button type="submit" id="edit-schedule-save-button" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save Changes</button>
                                     </div>
                                     <div class="col-md-6">
                                         <button type="button" onclick="viewEditPotions(false)" class="btn bg-gradient-secondary w-100 mt-4 mb-0">Cancel</button>
@@ -536,6 +536,7 @@
 
     $('#edit-schedule-form').on('submit', function(e) {
         e.preventDefault();
+        $('#edit-schedule-save-button').prop('disabled', true);
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -566,6 +567,7 @@
                 withCredentials: true,
             },
             success: function(response) {
+                $('#edit-schedule-save-button').prop('disabled', false);
                 $('#viewEditSchedule').modal('toggle');
                 $('#message-toast').toast('show');
                 $('#message-toast').addClass("bg-success");
@@ -576,6 +578,7 @@
             },
             error: function(xhr) {
                 $('#viewEditScheduleErrorMessages').show();
+                $('#edit-schedule-save-button').prop('disabled', false);
                 if (xhr.errors) {
                     $('#viewEditScheduleErrorMessages').html("Error!   Please fill all the required fields!");
                 } else {

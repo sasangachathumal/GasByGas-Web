@@ -228,7 +228,6 @@
     }
 
     function viewSelectedGasRequest(requestID) {
-        // $("#viewGasRequest").modal('toggle');
         if (requestID) {
             getSingleGasRequest(requestID)
                 .done(function(response) {
