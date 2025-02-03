@@ -213,7 +213,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
+                        <button type="submit" id="new-request-save-button" class="btn bg-gradient-warning w-100 mt-4 mb-0">Save</button>
                     </div>
                 </form>
             </div>
@@ -794,6 +794,7 @@
 
     $('#new-request-form').on('submit', function(e) {
         e.preventDefault();
+        $('#new-request-save-button').prop('disabled', true);
 
         // Get CSRF token from meta tag
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -808,6 +809,7 @@
 
         if (quantity <= 0) {
             $('#new-request-gas-quantity-error').html('<small>Enter valid quantity</small>');
+            $('#new-request-save-button').prop('disabled', false);
             return;
         } else {
             $('#new-request-gas-quantity-error').html('');
@@ -834,6 +836,7 @@
                 withCredentials: true,
             },
             success: function(response) {
+                $('#new-request-save-button').prop('disabled', false);
                 $('#new-request').modal('toggle');
                 $('#message-toast').toast('show');
                 $('#message-toast').addClass("bg-success");
@@ -843,6 +846,7 @@
             },
             error: function(xhr) {
                 $('#newRequestErrorMessages').show();
+                $('#new-request-save-button').prop('disabled', false);
                 if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.ACTIVE_REQ) {
                     $('#newRequestErrorMessages').html("Error!  " + xhr.responseJSON.errors.ACTIVE_REQ.message);
                 } else {
@@ -854,7 +858,7 @@
 
     $('#mark-payment-form').on('submit', function(e) {
         e.preventDefault();
-
+        $('#mark-payment-submit-button').prop('disabled', true);
         // Collect form data
         const requestID = $('#mark-payment-request-search-id').val();
         const empty = $('#mark-payment-got-empty').val();
@@ -873,7 +877,7 @@
 
     $('#mark-pickup-form').on('submit', function(e) {
         e.preventDefault();
-
+        $('#mark-pickup-submit-button').prop('disabled', true);
         // Collect form data
         const requestID = $('#mark-pickup-request-search-id').val();
         const pickup = $('#mark-pickup-done').val();
@@ -953,6 +957,12 @@
                 withCredentials: true,
             },
             success: function(response) {
+                if ('PAID' === status) {
+                    $('#mark-payment-submit-button').prop('disabled', false);
+                }
+                if ('COMPLETED' === status) {
+                    $('#mark-pickup-submit-button').prop('disabled', false);
+                }
                 $(`#${popupId}`).modal('toggle');
                 $('#message-toast').toast('show');
                 $('#message-toast').addClass("bg-success");

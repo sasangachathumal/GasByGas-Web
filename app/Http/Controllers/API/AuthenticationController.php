@@ -17,13 +17,16 @@ class AuthenticationController extends Controller
 {
     public function login(Request $request)
     {
+        // validating the request data
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // get user object
             $user = User::where('email', $request->email)->first();
+            // create auth token
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => true,
