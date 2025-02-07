@@ -95,7 +95,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
     Route::post('/forgot-password', [AuthenticationController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthenticationController::class, 'resetPassword']);
-    Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('/logout', [AuthenticationController::class, 'logout']);
 });
 
 // @TODO - This is tempery api to send gas pickup emails to consumers
